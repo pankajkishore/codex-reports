@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GitHub and Developer Setup | Codex Reports</title>
+    <meta
+      name="description"
+      content="A live report covering the local developer environment and GitHub authentication setup."
+    />
+    <link rel="stylesheet" href="../../assets/styles.css" />
+  </head>
+  <body class="report-page">
+    <main class="report-shell">
+      <nav class="report-nav">
+        <a href="../../">Codex Reports</a>
+        <a href="https://github.com/pankajkishore/codex-reports">View source</a>
+      </nav>
+
+      <header class="report-hero">
+        <p class="eyebrow">Setup report</p>
+        <h1>GitHub and Developer Environment Setup</h1>
+        <p class="report-summary">
+          This report captures the initial Codex workstation setup: package tooling,
+          starter projects, GitHub CLI authentication, Git credential integration,
+          and the launch of a live report hub.
+        </p>
+      </header>
+
+      <section class="report-section">
+        <h2>Verified Access</h2>
+        <div class="check-grid">
+          <article class="check-item">
+            <strong>Homebrew</strong>
+            <span>Installed and available from <code>/opt/homebrew/bin/brew</code>.</span>
+          </article>
+          <article class="check-item">
+            <strong>Node.js and npm</strong>
+            <span>Installed through Homebrew and ready for Vite/React apps.</span>
+          </article>
+          <article class="check-item">
+            <strong>Python</strong>
+            <span>Available locally, with <code>uv</code> installed for project workflow.</span>
+          </article>
+          <article class="check-item">
+            <strong>GitHub CLI</strong>
+            <span>Authenticated as <code>pankajkishore</code> with repository and workflow scopes.</span>
+          </article>
+          <article class="check-item">
+            <strong>Git Credentials</strong>
+            <span>Git is configured to use <code>gh</code> for GitHub HTTPS credentials.</span>
+          </article>
+          <article class="check-item">
+            <strong>Starter Projects</strong>
+            <span>Python and React/Vite starter projects were created and verified.</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="report-section">
+        <h2>Useful Commands</h2>
+        <pre class="command-block"><code>gh auth status
+gh repo list pankajkishore --limit 5
+git config --global --get user.name
+git config --global --get user.email
+npm create vite@latest my-app -- --template react-ts
+uv init my-python-project</code></pre>
+      </section>
+
+      <section class="report-section">
+        <h2>Publishing Pattern</h2>
+        <p>
+          Future reports should be added under
+          <code>reports/&lt;report-slug&gt;/index.html</code>. The homepage archive
+          links to each report, and GitHub Pages publishes the result as a stable
+          live URL after each push to <code>main</code>.
+        </p>
+      </section>
+    </main>
+    <script src="../../assets/main.js"></script>
+  </body>
+</html>

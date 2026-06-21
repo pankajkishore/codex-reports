@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Reports</title>
+    <meta
+      name="description"
+      content="A live GitHub Pages hub for reports, build notes, audits, and project summaries generated with Codex."
+    />
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+        <a class="brand" href="./">Codex Reports</a>
+        <div class="nav-links">
+          <a href="#reports">Reports</a>
+          <a href="https://github.com/pankajkishore/codex-reports">GitHub</a>
+        </div>
+      </nav>
+      <section class="hero">
+        <p class="eyebrow">Live project intelligence</p>
+        <h1>HTML reports for everything we build, debug, and ship.</h1>
+        <p class="hero-copy">
+          This hub publishes Codex-generated summaries, technical notes, setup logs,
+          and project dashboards as static GitHub Pages.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#reports">View reports</a>
+          <a class="button secondary" href="./reports/github-dev-setup/">Latest report</a>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="metrics" aria-label="Report hub metrics">
+        <article>
+          <span class="metric-value">1</span>
+          <span class="metric-label">Published report</span>
+        </article>
+        <article>
+          <span class="metric-value">GitHub Pages</span>
+          <span class="metric-label">Hosting target</span>
+        </article>
+        <article>
+          <span class="metric-value">Static HTML</span>
+          <span class="metric-label">Portable format</span>
+        </article>
+      </section>
+
+      <section id="reports" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Archive</p>
+          <h2>Reports</h2>
+        </div>
+
+        <div class="report-grid">
+          <a class="report-card" href="./reports/github-dev-setup/">
+            <span class="status">Published</span>
+            <h3>GitHub and Developer Setup</h3>
+            <p>
+              Homebrew, Node, Python, GitHub CLI authentication, Git credential
+              integration, and starter project setup.
+            </p>
+            <span class="card-meta">Setup report</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section split">
+        <div>
+          <p class="eyebrow">Workflow</p>
+          <h2>How new reports get published</h2>
+        </div>
+        <ol class="timeline">
+          <li>Codex completes a task or analysis.</li>
+          <li>A report is generated under <code>reports/&lt;slug&gt;/index.html</code>.</li>
+          <li>The homepage archive is updated.</li>
+          <li>Changes are committed and pushed to GitHub.</li>
+          <li>GitHub Pages publishes the report at a stable URL.</li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Generated with Codex</span>
+      <span id="updated"></span>
+    </footer>
+    <script src="./assets/main.js"></script>
+  </body>
+</html>
