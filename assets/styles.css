@@ -572,6 +572,12 @@ main {
   stroke-width: 1;
 }
 
+.axis-line {
+  fill: none;
+  stroke: rgba(23, 33, 43, 0.42);
+  stroke-width: 1.5;
+}
+
 .temp-line {
   fill: none;
   stroke-width: 4;
@@ -604,6 +610,12 @@ main {
 .axis-labels {
   fill: var(--muted);
   font-size: 11px;
+}
+
+.y-axis-labels {
+  fill: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .weather-card p {
