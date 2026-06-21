@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Workspace Operating System | Codex Reports</title>
+    <meta
+      name="description"
+      content="A shareable summary of the local Codex workspace structure, publishing rules, and GitHub reporting workflow."
+    />
+    <link rel="stylesheet" href="../../assets/styles.css" />
+  </head>
+  <body class="report-page">
+    <main class="report-shell">
+      <nav class="report-nav">
+        <a href="../../">Codex Reports</a>
+        <a href="https://github.com/pankajkishore/codex-reports">View source</a>
+      </nav>
+
+      <header class="report-hero">
+        <p class="eyebrow">Workspace rules</p>
+        <h1>Codex Workspace Operating System</h1>
+        <p class="report-summary">
+          The workspace now has a standing rule file, a clear folder structure,
+          GitHub publishing defaults, privacy guardrails, and a report workflow
+          for turning meaningful work into live HTML pages.
+        </p>
+      </header>
+
+      <section class="report-section">
+        <h2>Folder Structure</h2>
+        <div class="check-grid">
+          <article class="check-item">
+            <strong>projects/</strong>
+            <span>Real apps, tools, dashboards, and reusable work.</span>
+          </article>
+          <article class="check-item">
+            <strong>experiments/</strong>
+            <span>Quick prototypes that may later be promoted into projects.</span>
+          </article>
+          <article class="check-item">
+            <strong>inbox/</strong>
+            <span>Raw incoming files such as screenshots, PDFs, CSVs, and notes.</span>
+          </article>
+          <article class="check-item">
+            <strong>archive/</strong>
+            <span>Completed or inactive work that should remain available.</span>
+          </article>
+          <article class="check-item">
+            <strong>templates/</strong>
+            <span>Reusable starter files, prompts, and report patterns.</span>
+          </article>
+          <article class="check-item">
+            <strong>codex-reports/</strong>
+            <span>The GitHub Pages hub for shareable HTML reports.</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="report-section">
+        <h2>Autopilot Rule</h2>
+        <p>
+          When a task creates a meaningful artifact, Codex should organize it,
+          document it, test or build it when applicable, commit it, push it to
+          GitHub when appropriate, and publish or update an HTML report.
+        </p>
+      </section>
+
+      <section class="report-section">
+        <h2>GitHub Publishing Defaults</h2>
+        <pre class="command-block"><code>projects/&lt;slug&gt;      -> real repo candidates
+experiments/&lt;slug&gt;   -> quick prototypes
+codex-reports/       -> public GitHub Pages reports
+AGENTS.md            -> standing Codex rules</code></pre>
+      </section>
+
+      <section class="report-section">
+        <h2>Privacy Guardrails</h2>
+        <p>
+          Public reports must not include secrets, credentials, private client
+          data, sensitive personal details, raw mailbox contents, or private
+          documents. When a task might expose private information, Codex should
+          create a local draft first and ask before publishing.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
