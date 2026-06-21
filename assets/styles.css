@@ -537,6 +537,120 @@ main {
   color: var(--muted);
 }
 
+.day-planner {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.weather-card,
+.wear-card,
+.food-card {
+  border: 1px solid rgba(23, 33, 43, 0.12);
+  border-radius: 8px;
+  background: #f8fafb;
+  padding: 16px;
+}
+
+.weather-card h4,
+.wear-card h4,
+.food-card h4 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.weather-card svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.grid-line {
+  fill: none;
+  stroke: rgba(23, 33, 43, 0.14);
+  stroke-width: 1;
+}
+
+.temp-line {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.temp-line.day-one {
+  stroke: #e36f1e;
+}
+
+.temp-line.day-two {
+  stroke: #1267c7;
+}
+
+.temp-line.day-three {
+  stroke: #25783f;
+}
+
+.temp-line.day-four {
+  stroke: #6f2a9b;
+}
+
+.temp-points circle {
+  fill: #fff;
+  stroke: var(--accent-strong);
+  stroke-width: 2;
+}
+
+.axis-labels {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.weather-card p {
+  margin-top: 10px;
+}
+
+.wear-card ul,
+.food-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
+.wear-card li + li,
+.food-card li + li {
+  margin-top: 8px;
+}
+
+.weather-note {
+  border: 1px solid rgba(23, 33, 43, 0.14);
+  border-radius: 8px;
+  background: #fff;
+  padding: 24px;
+  margin-top: 44px;
+}
+
+.weather-note p {
+  max-width: 850px;
+  color: var(--muted);
+}
+
+.source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.source-links a {
+  border: 1px solid rgba(23, 33, 43, 0.16);
+  border-radius: 8px;
+  background: #f8fafb;
+  padding: 9px 12px;
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
 .two-column {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -603,7 +717,8 @@ main {
 
   .trip-stats,
   .day-focus dl,
-  .itinerary-grid {
+  .itinerary-grid,
+  .day-planner {
     grid-template-columns: 1fr;
   }
 
