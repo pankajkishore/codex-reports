@@ -506,7 +506,7 @@ main {
 
 .itinerary-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 14px;
 }
 
@@ -526,10 +526,58 @@ main {
   color: var(--accent);
 }
 
-.itinerary-grid ol {
-  margin: 16px 0;
-  padding-left: 22px;
+.stops-heading {
+  margin: 20px 0 12px;
+  font-size: 1rem;
+}
+
+.spot-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  margin: 0 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--line);
+  padding: 0;
+  list-style: none;
+  counter-reset: planned-stop;
+}
+
+.spot-list li {
+  position: relative;
+  min-height: 92px;
+  background: #f8fafb;
+  padding: 16px 16px 16px 54px;
+  counter-increment: planned-stop;
+}
+
+.spot-list li::before {
+  content: counter(planned-stop);
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-strong);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.spot-list strong,
+.spot-list span {
+  display: block;
+}
+
+.spot-list span {
+  margin-top: 4px;
   color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .itinerary-grid p {
@@ -935,7 +983,8 @@ main {
   .trip-stats,
   .day-focus dl,
   .itinerary-grid,
-  .day-planner {
+  .day-planner,
+  .spot-list {
     grid-template-columns: 1fr;
   }
 

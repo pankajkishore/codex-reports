@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import {
   constraints,
   itineraryDays,
@@ -8,6 +9,10 @@ import {
 import { routeGeometries } from "./route-geometries.mjs";
 
 const seenLocations = new Set();
+const reportHtml = await readFile(
+  new URL("./index.html", import.meta.url),
+  "utf8",
+);
 
 for (const [dayId, day] of Object.entries(itineraryDays)) {
   assert.equal(day.route[0], "hotel", `${dayId} must start at hotel`);
@@ -27,6 +32,21 @@ for (const [dayId, day] of Object.entries(itineraryDays)) {
   assert.ok(
     miles <= constraints.max_miles || day.allowOver200,
     `${dayId} exceeds ${constraints.max_miles} miles without an exception`,
+  );
+
+  const planMatch = reportHtml.match(
+    new RegExp(
+      `<ol class="spot-list" data-route-day="${dayId}">([\\s\\S]*?)</ol>`,
+    ),
+  );
+  assert.ok(planMatch, `${dayId} must have a detailed HTML spot list`);
+  const planStops = [
+    ...planMatch[1].matchAll(/data-location="([^"]+)"/g),
+  ].map((match) => match[1]);
+  assert.deepEqual(
+    planStops,
+    day.route,
+    `${dayId} HTML spot list must match its route array`,
   );
 }
 
