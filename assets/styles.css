@@ -504,6 +504,132 @@ main {
   font-weight: 900;
 }
 
+.arrival-section {
+  display: grid;
+  gap: 22px;
+}
+
+.arrival-section .section-heading p:last-child {
+  max-width: 760px;
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.road-trip-map {
+  margin: 0;
+}
+
+.road-trip-map img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(23, 33, 43, 0.18);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.road-trip-map figcaption {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.arrival-days {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.arrival-day {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  border: 1px solid rgba(23, 33, 43, 0.14);
+  border-top: 5px solid var(--drive-color);
+  border-radius: 8px;
+  background: #fff;
+  padding: 22px;
+}
+
+.day-one-drive {
+  --drive-color: #d85a16;
+}
+
+.day-two-drive {
+  --drive-color: #1267c7;
+}
+
+.arrival-day h3,
+.arrival-day h4,
+.arrival-day p {
+  margin: 0;
+}
+
+.arrival-day h3 {
+  font-size: 1.45rem;
+}
+
+.arrival-route {
+  margin-top: 8px !important;
+  color: var(--muted);
+}
+
+.arrival-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--line);
+}
+
+.arrival-metrics div {
+  background: #f8fafb;
+  padding: 12px;
+}
+
+.arrival-metrics dt {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.arrival-metrics dd {
+  margin: 3px 0 0;
+  color: var(--accent-strong);
+  font-weight: 900;
+}
+
+.arrival-details {
+  display: grid;
+  gap: 14px;
+}
+
+.arrival-details h4 {
+  font-size: 0.92rem;
+}
+
+.arrival-details p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.overnight-note,
+.road-trip-guidance {
+  border-left: 4px solid var(--drive-color, var(--green));
+  background: #f8fafb;
+  padding: 12px 14px;
+  color: var(--muted);
+}
+
+.road-trip-guidance {
+  margin: 0;
+  border-left-color: var(--green);
+}
+
 .itinerary-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -982,9 +1108,14 @@ main {
 
   .trip-stats,
   .day-focus dl,
+  .arrival-days,
   .itinerary-grid,
   .day-planner,
   .spot-list {
+    grid-template-columns: 1fr;
+  }
+
+  .arrival-metrics {
     grid-template-columns: 1fr;
   }
 

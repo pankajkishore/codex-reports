@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import {
   constraints,
   itineraryDays,
@@ -12,6 +12,19 @@ const seenLocations = new Set();
 const reportHtml = await readFile(
   new URL("./index.html", import.meta.url),
   "utf8",
+);
+await access(
+  new URL(
+    "../../assets/images/milpitas-to-yellowstone-road-trip.png",
+    import.meta.url,
+  ),
+);
+assert.match(reportHtml, /Milpitas to Island Park in two days/);
+assert.match(reportHtml, /600–630 miles/);
+assert.match(reportHtml, /SureStay Hotel by Best Western Twin\s+Falls/);
+assert.match(
+  reportHtml,
+  /SpringHill Suites by Marriott Island\s+Park Yellowstone/,
 );
 
 for (const [dayId, day] of Object.entries(itineraryDays)) {
