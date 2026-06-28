@@ -31,7 +31,7 @@
         <aside class="trip-card">
           <span class="status">Tesla-focused</span>
           <strong>Daily rule</strong>
-          <p>Start each day at 100%, charge after returning, and keep wildlife-jam buffer.</p>
+          <p>Start at 95%, finish at 25% or higher, and keep each optimized route under 200 miles.</p>
         </aside>
       </header>
 
@@ -45,12 +45,12 @@
           <strong>Primary base</strong>
         </article>
         <article>
-          <span>70 to 200 mi/day</span>
-          <strong>Estimated driving</strong>
+          <span>≤200 mi/day</span>
+          <strong>Optimizer constraint</strong>
         </article>
         <article>
-          <span>20% to 65%</span>
-          <strong>Estimated end battery</strong>
+          <span>≥25% SOC</span>
+          <strong>Required end buffer</strong>
         </article>
       </section>
 
@@ -78,6 +78,67 @@
             <div><dt>Energy style</dt><dd>Light warm-up day</dd></div>
           </dl>
         </article>
+      </section>
+
+      <section id="optimizer" class="trip-section optimizer-section">
+        <div class="optimizer-heading">
+          <div>
+            <p class="eyebrow">Route optimizer</p>
+            <h2>Best gate, route, and battery buffer</h2>
+            <p>
+              Each day evaluates all five entrance gates, every stop order, road
+              distance, drive time, conservative energy use, repeated roads, and
+              wildlife timing.
+            </p>
+          </div>
+          <label class="route-toggle">
+            <input id="showAlternatives" type="checkbox" />
+            <span>Show rejected gate routes</span>
+          </label>
+        </div>
+
+        <div class="optimizer-layout">
+          <div class="route-map-shell">
+            <div class="map-toolbar">
+              <strong id="mapStatus">Calculating route…</strong>
+              <span>Schematic planning map</span>
+            </div>
+            <svg id="routeMap" viewBox="0 0 760 520" role="img" aria-live="polite"></svg>
+          </div>
+          <aside class="route-summary">
+            <h3>Selected stop order</h3>
+            <ol id="routeOrder"></ol>
+            <div class="model-note">
+              <strong>Energy model</strong>
+              <span id="energyModel"></span>
+              <span id="rangeModel"></span>
+              <span id="wildlifeModel"></span>
+            </div>
+          </aside>
+        </div>
+
+        <details class="alternative-panel">
+          <summary>Rejected and higher-scoring gate alternatives</summary>
+          <div class="table-scroll">
+            <table class="route-table">
+              <thead>
+                <tr>
+                  <th>Entrance gate</th>
+                  <th>Distance</th>
+                  <th>Drive</th>
+                  <th>End SOC</th>
+                  <th>Decision</th>
+                </tr>
+              </thead>
+              <tbody id="routeAlternatives"></tbody>
+            </table>
+          </div>
+        </details>
+        <p class="optimizer-caveat">
+          Planning estimates use an approximate hotel location and a modeled
+          park-road graph. Verify closures, construction, and live navigation
+          before departure.
+        </p>
       </section>
 
       <section class="trip-section itinerary-grid">
@@ -357,7 +418,7 @@
       <section id="map" class="trip-section map-section">
         <div>
           <p class="eyebrow">Route map</p>
-          <h2>Full itinerary map</h2>
+          <h2>Original itinerary reference map</h2>
           <p>
             The map below is the master visual guide for the route colors,
             mileage estimates, charger plan, and daily stop order.
@@ -372,66 +433,6 @@
       </section>
     </main>
 
-    <script>
-      const days = {
-        day1: {
-          eyebrow: "Day 1 · Jun 30 Tue",
-          title: "West Yellowstone and Grand Prismatic",
-          copy:
-            "Easy arrival afternoon with Madison River, Grand Prismatic Overlook, Firehole Lake Drive, and return to hotel.",
-          miles: "~70",
-          battery: "55-65%",
-          style: "Light warm-up day",
-        },
-        day2: {
-          eyebrow: "Day 2 · Jul 1 Wed",
-          title: "Old Faithful and Yellowstone Lake",
-          copy:
-            "Classic south loop with Old Faithful, West Thumb Geyser Basin, lake scenery, and a comfortable return west.",
-          miles: "~150-170",
-          battery: "40-50%",
-          style: "Full scenic loop",
-        },
-        day3: {
-          eyebrow: "Day 3 · Jul 2 Thu",
-          title: "Canyon, Artist Point, and Hayden Valley",
-          copy:
-            "Waterfalls, canyon viewpoints, geyser basin time, and the best wildlife-focused segment in Hayden Valley.",
-          miles: "~160-190",
-          battery: "30-45%",
-          style: "Views plus wildlife",
-        },
-        day4: {
-          eyebrow: "Day 4 · Jul 3 Fri",
-          title: "Mammoth, Tower Fall, and Western Lamar",
-          copy:
-            "The biggest driving day, focused on northern Yellowstone with Mammoth Hot Springs, Tower Fall, and a Lamar Valley turnaround.",
-          miles: "~180-200",
-          battery: "20-35%",
-          style: "Longest range day",
-        },
-      };
-
-      const focus = document.querySelector("#dayFocus");
-      const tabs = document.querySelectorAll(".day-tab");
-
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          tabs.forEach((item) => item.classList.remove("active"));
-          tab.classList.add("active");
-          const day = days[tab.dataset.day];
-          focus.innerHTML = `
-            <p class="eyebrow">${day.eyebrow}</p>
-            <h3>${day.title}</h3>
-            <p>${day.copy}</p>
-            <dl>
-              <div><dt>Estimated miles</dt><dd>${day.miles}</dd></div>
-              <div><dt>Battery end</dt><dd>${day.battery}</dd></div>
-              <div><dt>Energy style</dt><dd>${day.style}</dd></div>
-            </dl>
-          `;
-        });
-      });
-    </script>
+    <script type="module" src="./route-ui.mjs"></script>
   </body>
 </html>

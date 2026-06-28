@@ -710,6 +710,272 @@ main {
   box-shadow: var(--shadow);
 }
 
+.optimizer-section {
+  display: grid;
+  gap: 22px;
+}
+
+.optimizer-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.optimizer-heading p {
+  max-width: 780px;
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.route-toggle {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(23, 33, 43, 0.2);
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.route-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-strong);
+}
+
+.optimizer-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(250px, 0.65fr);
+  gap: 16px;
+}
+
+.route-map-shell,
+.route-summary {
+  border: 1px solid rgba(23, 33, 43, 0.14);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.map-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+  padding: 14px 16px;
+}
+
+.map-toolbar strong {
+  color: var(--accent-strong);
+}
+
+.map-toolbar span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+#routeMap {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 760 / 520;
+  background: #eef3ed;
+}
+
+.map-grid line {
+  stroke: rgba(23, 33, 43, 0.07);
+  stroke-width: 1;
+  stroke-dasharray: 3 8;
+}
+
+.park-roads line {
+  stroke: #a4aca7;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.route-selected,
+.route-rejected {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.route-selected {
+  stroke: #006d77;
+  stroke-width: 7;
+}
+
+.route-rejected {
+  stroke: #727d86;
+  stroke-width: 3;
+  stroke-dasharray: 8 9;
+  opacity: 0.3;
+}
+
+.map-marker circle {
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.map-marker.hotel circle {
+  fill: #b42318;
+}
+
+.map-marker.gate circle {
+  fill: #17212b;
+}
+
+.map-marker.stop circle {
+  fill: #c68a1c;
+}
+
+.map-marker text,
+.map-legend text {
+  fill: #17212b;
+  font-size: 12px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: #eef3ed;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.map-marker.charger rect,
+.legend-charger {
+  fill: #2c7a4b;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.map-legend {
+  font-size: 12px;
+}
+
+.legend-selected {
+  stroke: #006d77;
+  stroke-width: 6;
+}
+
+.legend-rejected {
+  stroke: #727d86;
+  stroke-width: 3;
+  stroke-dasharray: 7 7;
+  opacity: 0.55;
+}
+
+.route-summary {
+  padding: 20px;
+}
+
+.route-summary h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.route-summary ol {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.route-summary li {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 9px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.route-summary li span {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-strong);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.model-note {
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.model-note span {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.alternative-panel {
+  border: 1px solid rgba(23, 33, 43, 0.14);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.alternative-panel summary {
+  padding: 16px 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border-top: 1px solid var(--line);
+}
+
+.route-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.route-table th,
+.route-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 16px;
+  vertical-align: top;
+}
+
+.route-table thead th {
+  background: #f8fafb;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.route-state {
+  font-weight: 900;
+}
+
+.route-state.infeasible {
+  color: #b42318;
+}
+
+.route-state.higher-score {
+  color: #8a5b00;
+}
+
+.optimizer-caveat {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
 @media (max-width: 720px) {
   .nav,
   .footer,
@@ -730,8 +996,23 @@ main {
   .trip-stats,
   .day-focus dl,
   .itinerary-grid,
-  .day-planner {
+  .day-planner,
+  .optimizer-layout {
     grid-template-columns: 1fr;
+  }
+
+  .optimizer-heading,
+  .map-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .route-toggle {
+    width: fit-content;
+  }
+
+  .map-marker text {
+    font-size: 10px;
   }
 
   .section {
