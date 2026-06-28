@@ -716,10 +716,7 @@ main {
 }
 
 .optimizer-heading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 28px;
+  display: block;
 }
 
 .optimizer-heading p {
@@ -728,35 +725,33 @@ main {
   color: var(--muted);
 }
 
-.route-toggle {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid rgba(23, 33, 43, 0.2);
+.map-day-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.map-day-button {
+  min-height: 42px;
+  border: 1px solid rgba(23, 33, 43, 0.22);
   border-radius: 8px;
   background: #fff;
-  padding: 10px 14px;
+  color: var(--ink);
+  padding: 0 16px;
+  font: inherit;
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 900;
   cursor: pointer;
-  white-space: nowrap;
 }
 
-.route-toggle input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent-strong);
+.map-day-button.active {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: #fff;
 }
 
-.optimizer-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(250px, 0.65fr);
-  gap: 16px;
-}
-
-.route-map-shell,
-.route-summary {
+.route-map-shell {
+  overflow: hidden;
   border: 1px solid rgba(23, 33, 43, 0.14);
   border-radius: 8px;
   background: #fff;
@@ -780,166 +775,104 @@ main {
 }
 
 #routeMap {
-  display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 760 / 520;
+  height: min(68vh, 650px);
+  min-height: 520px;
   background: #eef3ed;
+  isolation: isolate;
 }
 
-.map-grid line {
-  stroke: rgba(23, 33, 43, 0.07);
-  stroke-width: 1;
-  stroke-dasharray: 3 8;
+.leaflet-container {
+  font-family: inherit;
 }
 
-.park-roads line {
-  stroke: #a4aca7;
-  stroke-width: 5;
-  stroke-linecap: round;
+.leaflet-popup-content {
+  min-width: 190px;
+  margin: 14px 16px;
+  color: var(--ink);
+  line-height: 1.45;
 }
 
-.route-selected,
-.route-rejected {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.route-selected {
-  stroke: #006d77;
-  stroke-width: 7;
-}
-
-.route-rejected {
-  stroke: #727d86;
-  stroke-width: 3;
-  stroke-dasharray: 8 9;
-  opacity: 0.3;
-}
-
-.map-marker circle {
-  stroke: #fff;
-  stroke-width: 3;
-}
-
-.map-marker.hotel circle {
-  fill: #b42318;
-}
-
-.map-marker.gate circle {
-  fill: #17212b;
-}
-
-.map-marker.stop circle {
-  fill: #c68a1c;
-}
-
-.map-marker text,
-.map-legend text {
-  fill: #17212b;
-  font-size: 12px;
-  font-weight: 800;
-  paint-order: stroke;
-  stroke: #eef3ed;
-  stroke-width: 4px;
-  stroke-linejoin: round;
-}
-
-.map-marker.charger rect,
-.legend-charger {
-  fill: #2c7a4b;
-  stroke: #fff;
-  stroke-width: 2;
-}
-
-.map-legend {
-  font-size: 12px;
-}
-
-.legend-selected {
-  stroke: #006d77;
-  stroke-width: 6;
-}
-
-.legend-rejected {
-  stroke: #727d86;
-  stroke-width: 3;
-  stroke-dasharray: 7 7;
-  opacity: 0.55;
-}
-
-.route-summary {
-  padding: 20px;
-}
-
-.route-summary h3 {
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.route-summary ol {
-  display: grid;
-  gap: 10px;
-  margin: 18px 0;
-  padding: 0;
-  list-style: none;
-}
-
-.route-summary li {
-  display: grid;
-  grid-template-columns: 26px 1fr;
-  gap: 9px;
-  align-items: center;
+.popup-coordinates {
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 0.78rem;
 }
 
-.route-summary li span {
+.route-marker-shell {
+  border: 0;
+  background: transparent;
+}
+
+.route-marker {
   display: grid;
-  width: 26px;
-  height: 26px;
+  min-width: 38px;
+  height: 28px;
   place-items: center;
-  border-radius: 50%;
-  background: var(--accent-strong);
+  border: 2px solid #fff;
+  border-radius: 999px;
+  background: var(--marker-color);
+  box-shadow: 0 2px 8px rgba(23, 33, 43, 0.3);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 900;
+  white-space: nowrap;
 }
 
-.model-note {
-  display: grid;
-  gap: 6px;
-  border-top: 1px solid var(--line);
-  padding-top: 16px;
+.route-marker.is-charger {
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 
-.model-note span {
-  color: var(--muted);
-  font-size: 0.84rem;
+.tiles-unavailable {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(23, 33, 43, 0.03),
+      rgba(23, 33, 43, 0.03) 10px,
+      transparent 10px,
+      transparent 20px
+    ),
+    #eef3ed;
 }
 
-.alternative-panel {
+.map-error {
+  margin: 0;
+  padding: 24px;
+  color: #b42318;
+  font-weight: 800;
+}
+
+.map-validation {
+  border-left: 4px solid var(--green);
+  background: rgba(44, 122, 75, 0.08);
+  padding: 12px 14px;
+  color: #225c3b;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.map-validation.has-errors {
+  border-left-color: #b42318;
+  background: rgba(180, 35, 24, 0.08);
+  color: #8f1c13;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.route-summary-table {
   border: 1px solid rgba(23, 33, 43, 0.14);
   border-radius: 8px;
   background: #fff;
 }
 
-.alternative-panel summary {
-  padding: 16px 18px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.table-scroll {
-  overflow-x: auto;
-  border-top: 1px solid var(--line);
-}
-
 .route-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 720px;
+  min-width: 1040px;
   text-align: left;
   font-size: 0.88rem;
 }
@@ -958,16 +891,22 @@ main {
   text-transform: uppercase;
 }
 
-.route-state {
-  font-weight: 900;
+.route-table tbody th {
+  white-space: nowrap;
 }
 
-.route-state.infeasible {
+.day-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--day-color);
+}
+
+.over-limit {
   color: #b42318;
-}
-
-.route-state.higher-score {
-  color: #8a5b00;
+  font-weight: 900;
 }
 
 .optimizer-caveat {
@@ -996,23 +935,28 @@ main {
   .trip-stats,
   .day-focus dl,
   .itinerary-grid,
-  .day-planner,
-  .optimizer-layout {
+  .day-planner {
     grid-template-columns: 1fr;
   }
 
-  .optimizer-heading,
   .map-toolbar {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .route-toggle {
-    width: fit-content;
+  .map-day-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  .map-marker text {
-    font-size: 10px;
+  .map-day-button {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  #routeMap {
+    height: 480px;
+    min-height: 420px;
   }
 
   .section {

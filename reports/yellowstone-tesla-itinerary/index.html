@@ -8,13 +8,14 @@
       name="description"
       content="A focused 4-day Yellowstone itinerary optimized for a Tesla Model Y Long Range, based near West Entrance."
     />
+    <link rel="stylesheet" href="../../assets/vendor/leaflet/leaflet.css" />
     <link rel="stylesheet" href="../../assets/styles.css" />
   </head>
   <body class="trip-page">
     <main class="trip-shell">
       <nav class="report-nav">
         <a href="../../">Codex Reports</a>
-        <a href="#map">Full map</a>
+        <a href="#optimizer">Road map</a>
       </nav>
 
       <header class="trip-hero">
@@ -31,7 +32,7 @@
         <aside class="trip-card">
           <span class="status">Tesla-focused</span>
           <strong>Daily rule</strong>
-          <p>Start at 95%, finish at 25% or higher, and keep each optimized route under 200 miles.</p>
+          <p>Start at 95%, finish at 25% or higher, and recharge before the hotel when required.</p>
         </aside>
       </header>
 
@@ -45,12 +46,12 @@
           <strong>Primary base</strong>
         </article>
         <article>
-          <span>≤200 mi/day</span>
-          <strong>Optimizer constraint</strong>
+          <span>3 days ≤200 mi</span>
+          <strong>Day 4: 211 mi</strong>
         </article>
         <article>
-          <span>≥25% SOC</span>
-          <strong>Required end buffer</strong>
+          <span>33%+ pre-charge</span>
+          <strong>Modeled daily buffer</strong>
         </article>
       </section>
 
@@ -83,62 +84,60 @@
       <section id="optimizer" class="trip-section optimizer-section">
         <div class="optimizer-heading">
           <div>
-            <p class="eyebrow">Route optimizer</p>
-            <h2>Best gate, route, and battery buffer</h2>
+            <p class="eyebrow">Interactive road map</p>
+            <h2>Actual roads, stops, and charging</h2>
             <p>
-              Each day evaluates all five entrance gates, every stop order, road
-              distance, drive time, conservative energy use, repeated roads, and
-              wildlife timing.
+              OpenStreetMap tiles with OSRM road geometry. Select one day for
+              numbered stops or show all four colored routes together.
             </p>
           </div>
-          <label class="route-toggle">
-            <input id="showAlternatives" type="checkbox" />
-            <span>Show rejected gate routes</span>
-          </label>
         </div>
 
-        <div class="optimizer-layout">
-          <div class="route-map-shell">
-            <div class="map-toolbar">
-              <strong id="mapStatus">Calculating route…</strong>
-              <span>Schematic planning map</span>
-            </div>
-            <svg id="routeMap" viewBox="0 0 760 520" role="img" aria-live="polite"></svg>
-          </div>
-          <aside class="route-summary">
-            <h3>Selected stop order</h3>
-            <ol id="routeOrder"></ol>
-            <div class="model-note">
-              <strong>Energy model</strong>
-              <span id="energyModel"></span>
-              <span id="rangeModel"></span>
-              <span id="wildlifeModel"></span>
-            </div>
-          </aside>
+        <div class="map-day-selector" role="group" aria-label="Map route day">
+          <button class="map-day-button active" type="button" data-map-day="day1" aria-pressed="true">Day 1</button>
+          <button class="map-day-button" type="button" data-map-day="day2" aria-pressed="false">Day 2</button>
+          <button class="map-day-button" type="button" data-map-day="day3" aria-pressed="false">Day 3</button>
+          <button class="map-day-button" type="button" data-map-day="day4" aria-pressed="false">Day 4</button>
+          <button class="map-day-button" type="button" data-map-day="all" aria-pressed="false">Show all</button>
         </div>
 
-        <details class="alternative-panel">
-          <summary>Rejected and higher-scoring gate alternatives</summary>
-          <div class="table-scroll">
-            <table class="route-table">
-              <thead>
-                <tr>
-                  <th>Entrance gate</th>
-                  <th>Distance</th>
-                  <th>Drive</th>
-                  <th>End SOC</th>
-                  <th>Decision</th>
-                </tr>
-              </thead>
-              <tbody id="routeAlternatives"></tbody>
-            </table>
+        <div class="route-map-shell">
+          <div class="map-toolbar">
+            <strong id="mapStatus">Loading road routes…</strong>
+            <span>Use +/− controls to zoom</span>
           </div>
-        </details>
+          <div id="routeMap" aria-label="Interactive Yellowstone daily road route map"></div>
+        </div>
+
+        <div class="map-validation" id="mapValidation" role="status">Validating routes…</div>
+
+        <div class="table-scroll route-summary-table">
+          <table class="route-table">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Ordered stops</th>
+                <th>Gate used</th>
+                <th>Miles</th>
+                <th>Drive time</th>
+                <th>Charge stop</th>
+                <th>End SOC</th>
+              </tr>
+            </thead>
+            <tbody id="routeSummaryBody"></tbody>
+          </table>
+        </div>
         <p class="optimizer-caveat">
-          Planning estimates use an approximate hotel location and a modeled
-          park-road graph. Verify closures, construction, and live navigation
-          before departure.
+          <span id="routeGeneratedAt"></span> Coordinates are WGS84. Distances
+          exclude traffic, wildlife delays, parking searches, and closures.
+          Verify conditions in live navigation before departure.
         </p>
+        <div class="source-links" aria-label="Map data sources">
+          <a href="https://www.openstreetmap.org/copyright">OpenStreetMap data</a>
+          <a href="https://project-osrm.org/">OSRM routing</a>
+          <a href="https://www.nps.gov/articles/evcharging.htm">NPS Yellowstone EV charging</a>
+          <a href="https://www.marriott.com/en-us/hotels/idasl-springhill-suites-island-park-yellowstone/overview/">SpringHill Suites property</a>
+        </div>
       </section>
 
       <section class="trip-section itinerary-grid">
@@ -146,12 +145,12 @@
           <summary><span>Day 1</span> West Yellowstone + Grand Prismatic</summary>
           <ol>
             <li>West Entrance</li>
-            <li>Madison River</li>
-            <li>Grand Prismatic Overlook</li>
-            <li>Firehole Lake Drive</li>
-            <li>Return to hotel</li>
+            <li>Madison Junction</li>
+            <li>Grand Prismatic Spring</li>
+            <li>Old Faithful</li>
+            <li>West Yellowstone Supercharger, then hotel</li>
           </ol>
-          <p><strong>Drive:</strong> ~70 miles. <strong>Estimated battery:</strong> 55-65% end.</p>
+          <p><strong>Drive:</strong> 111 miles. <strong>Estimated battery:</strong> ~82% after optional top-up.</p>
           <div class="day-planner">
             <article class="weather-card">
               <h4>Hourly forecast in Celsius</h4>
@@ -208,7 +207,7 @@
             <li>Yellowstone Lake</li>
             <li>Return to hotel</li>
           </ol>
-          <p><strong>Drive:</strong> ~150-170 miles. <strong>Estimated battery:</strong> 40-50% end.</p>
+          <p><strong>Drive:</strong> 175 miles. <strong>Estimated battery:</strong> ~33% end.</p>
           <div class="day-planner">
             <article class="weather-card">
               <h4>Hourly forecast in Celsius</h4>
@@ -266,7 +265,7 @@
             <li>Hayden Valley wildlife time</li>
             <li>Return to hotel</li>
           </ol>
-          <p><strong>Drive:</strong> ~160-190 miles. <strong>Estimated battery:</strong> 30-45% end.</p>
+          <p><strong>Drive:</strong> 148 miles. <strong>Estimated battery:</strong> ~43% end.</p>
           <div class="day-planner">
             <article class="weather-card">
               <h4>Hourly forecast in Celsius</h4>
@@ -320,12 +319,10 @@
             <li>Norris Geyser Basin</li>
             <li>Mammoth Hot Springs</li>
             <li>Tower Fall</li>
-            <li>Western Lamar Valley turnaround near Slough Creek or Soda Butte</li>
-            <li>Tower Fall</li>
-            <li>Mammoth Hot Springs</li>
-            <li>Return to hotel</li>
+            <li>Lamar Valley</li>
+            <li>West Yellowstone Supercharger, then hotel</li>
           </ol>
-          <p><strong>Drive:</strong> ~180-200 miles. <strong>Estimated battery:</strong> 20-35% end.</p>
+          <p><strong>Drive:</strong> 211 miles. <strong>Estimated battery:</strong> ~82% after required top-up.</p>
           <div class="day-planner">
             <article class="weather-card">
               <h4>Hourly forecast in Celsius</h4>
@@ -415,24 +412,9 @@
         </article>
       </section>
 
-      <section id="map" class="trip-section map-section">
-        <div>
-          <p class="eyebrow">Route map</p>
-          <h2>Original itinerary reference map</h2>
-          <p>
-            The map below is the master visual guide for the route colors,
-            mileage estimates, charger plan, and daily stop order.
-          </p>
-        </div>
-        <a href="../../assets/images/yellowstone-tesla-map.png">
-          <img
-            src="../../assets/images/yellowstone-tesla-map.png"
-            alt="Yellowstone 4-day Tesla itinerary map with daily routes and charging plan"
-          />
-        </a>
-      </section>
     </main>
 
+    <script src="../../assets/vendor/leaflet/leaflet.js"></script>
     <script type="module" src="./route-ui.mjs"></script>
   </body>
 </html>

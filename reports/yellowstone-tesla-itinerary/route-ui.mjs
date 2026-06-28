@@ -1,44 +1,57 @@
 import {
-  chargers,
+  chargerIds,
   constraints,
-  days,
+  itineraryDays,
   locations,
-  roadSegments,
+  requiredMappedLocations,
   vehicle,
 } from "./route-data.mjs";
 import {
-  optimizeItinerary,
-  rejectionReasons,
-} from "./route-optimizer.mjs";
+  generatedAt,
+  routeGeometries,
+} from "./route-geometries.mjs";
 
-const results = Object.fromEntries(
-  optimizeItinerary().map((result) => [result.dayId, result]),
-);
-const tabs = [...document.querySelectorAll(".day-tab")];
-const focus = document.querySelector("#dayFocus");
-const map = document.querySelector("#routeMap");
-const routeOrder = document.querySelector("#routeOrder");
-const alternatives = document.querySelector("#routeAlternatives");
-const alternativeToggle = document.querySelector("#showAlternatives");
+const mapElement = document.querySelector("#routeMap");
 const mapStatus = document.querySelector("#mapStatus");
-let activeDay = "day1";
+const summaryBody = document.querySelector("#routeSummaryBody");
+const validationStatus = document.querySelector("#mapValidation");
+const selectorButtons = [
+  ...document.querySelectorAll("[data-map-day]"),
+];
+const focus = document.querySelector("#dayFocus");
+const dayTabs = [...document.querySelectorAll(".day-tab")];
 
-const bounds = {
-  minLat: 44.08,
-  maxLat: 45.08,
-  minLng: -111.42,
-  maxLng: -109.93,
-};
-
-function project({ lat, lng }) {
-  const width = 760;
-  const height = 520;
-  const pad = 38;
-  return {
-    x: pad + ((lng - bounds.minLng) / (bounds.maxLng - bounds.minLng)) * (width - pad * 2),
-    y: height - pad - ((lat - bounds.minLat) / (bounds.maxLat - bounds.minLat)) * (height - pad * 2),
-  };
+if (!globalThis.L) {
+  mapElement.innerHTML =
+    '<p class="map-error">The map library could not load. Check your connection and reload.</p>';
+  throw new Error("Leaflet failed to load");
 }
+
+const L = globalThis.L;
+const map = L.map(mapElement, {
+  scrollWheelZoom: false,
+  zoomControl: true,
+  zoomAnimation: false,
+  fadeAnimation: false,
+  markerZoomAnimation: false,
+});
+
+const tileLayer = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(map);
+
+tileLayer.on("tileerror", () => {
+  mapElement.classList.add("tiles-unavailable");
+});
+
+const routeLayerHost = L.layerGroup().addTo(map);
+const markerLayerHost = L.layerGroup().addTo(map);
+const routeLayers = {};
 
 function escapeHtml(value) {
   return String(value)
@@ -48,198 +61,280 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
-function formatMinutes(totalMinutes) {
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = Math.round(totalMinutes % 60);
+function formatMiles(meters) {
+  return `${(meters / 1609.344).toFixed(1)} mi`;
+}
+
+function formatDuration(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.round((seconds % 3600) / 60);
   return `${hours}h ${minutes}m`;
 }
 
-function formatClock(minutes) {
-  if (minutes === null) return "Not applicable";
-  const normalized = minutes % (24 * 60);
-  const hour = Math.floor(normalized / 60);
-  const minute = Math.round(normalized % 60);
-  return new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(2026, 5, 30, hour, minute));
+function estimateEndSoc(day, geometry) {
+  const practicalCapacityWh =
+    (vehicle.practical_miles_at_80_percent / 0.8) *
+    vehicle.consumption_wh_per_mile;
+  let startSoc = constraints.start_soc;
+  let distanceMeters = geometry.distanceMeters;
+
+  if (day.chargeStop && day.chargeTargetSoc) {
+    const chargeIndex = day.route.lastIndexOf(day.chargeStop);
+    distanceMeters = geometry.legs
+      .slice(chargeIndex)
+      .reduce((total, leg) => total + leg.distanceMeters, 0);
+    startSoc = day.chargeTargetSoc;
+  }
+
+  const miles = distanceMeters / 1609.344;
+  return Math.max(
+    0,
+    startSoc -
+      ((miles * vehicle.consumption_wh_per_mile) / practicalCapacityWh) * 100,
+  );
 }
 
-function routePoints(candidate) {
-  return candidate.routeNodes
-    .map((node) => {
-      const point = project(locations[node]);
-      return `${point.x.toFixed(1)},${point.y.toFixed(1)}`;
+function routeLatLngs(dayId) {
+  return routeGeometries[dayId].coordinates.map(([lng, lat]) => [lat, lng]);
+}
+
+function createRouteLayer(dayId) {
+  const day = itineraryDays[dayId];
+  const latLngs = routeLatLngs(dayId);
+  const group = L.layerGroup();
+  L.polyline(latLngs, {
+    color: "#ffffff",
+    weight: 9,
+    opacity: 0.9,
+    interactive: false,
+  }).addTo(group);
+  L.polyline(latLngs, {
+    color: day.color,
+    weight: 5,
+    opacity: 0.95,
+    lineCap: "round",
+    lineJoin: "round",
+  })
+    .bindTooltip(`${day.label}: ${day.title}`, { sticky: true })
+    .addTo(group);
+  return group;
+}
+
+function markerIcon(label, color, charger = false) {
+  return L.divIcon({
+    className: "route-marker-shell",
+    html: `<span class="route-marker ${charger ? "is-charger" : ""}" style="--marker-color:${color}">${escapeHtml(label)}</span>`,
+    iconSize: charger ? [32, 32] : [38, 28],
+    iconAnchor: charger ? [16, 16] : [19, 14],
+    popupAnchor: [0, -16],
+  });
+}
+
+function popupMarkup(locationId, codes = []) {
+  const location = locations[locationId];
+  const codeLine = codes.length
+    ? `<strong>${codes.map(escapeHtml).join(" / ")}</strong>`
+    : "<strong>EV charger</strong>";
+  const chargerDetails =
+    location.kind === "charger"
+      ? `<br>${escapeHtml(location.connector)} · ${escapeHtml(location.power)}`
+      : "";
+  return `${codeLine}<br>${escapeHtml(location.name)}${chargerDetails}
+    <br><span class="popup-coordinates">${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}</span>`;
+}
+
+function addDayMarkers(dayId) {
+  const day = itineraryDays[dayId];
+  const seen = new Set();
+  day.route.slice(0, -1).forEach((locationId, index) => {
+    if (seen.has(locationId)) return;
+    seen.add(locationId);
+    const location = locations[locationId];
+    const code = `${day.shortLabel}-${index}`;
+    L.marker([location.lat, location.lng], {
+      icon: markerIcon(code, day.color, location.kind === "charger"),
+      keyboard: true,
+      title: `${code} ${location.name}`,
     })
-    .join(" ");
+      .bindPopup(popupMarkup(locationId, [code]))
+      .addTo(markerLayerHost);
+  });
+
+  addOtherChargers(seen);
 }
 
-function roadMarkup() {
-  return roadSegments
-    .map(([from, to]) => {
-      const start = project(locations[from]);
-      const end = project(locations[to]);
-      return `<line x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" />`;
+function addOtherChargers(excluded = new Set()) {
+  for (const locationId of chargerIds) {
+    if (excluded.has(locationId)) continue;
+    const location = locations[locationId];
+    L.marker([location.lat, location.lng], {
+      icon: markerIcon("EV", "#2c7a4b", true),
+      keyboard: true,
+      title: location.name,
     })
-    .join("");
+      .bindPopup(popupMarkup(locationId))
+      .addTo(markerLayerHost);
+  }
 }
 
-function rejectedMarkup(result) {
-  if (!alternativeToggle.checked) return "";
-  return result.alternatives
-    .map(
-      (candidate) =>
-        `<polyline class="route-rejected" points="${routePoints(candidate)}">
-          <title>${escapeHtml(candidate.gateName)}: ${Math.round(candidate.miles)} miles, ${candidate.energy.endSoc.toFixed(0)}% end SOC</title>
-        </polyline>`,
-    )
-    .join("");
-}
+function addSharedMarkers() {
+  const appearances = new Map();
+  for (const day of Object.values(itineraryDays)) {
+    day.route.slice(0, -1).forEach((locationId, index) => {
+      const codes = appearances.get(locationId) ?? [];
+      codes.push(`${day.shortLabel}-${index}`);
+      appearances.set(locationId, codes);
+    });
+  }
 
-function markerMarkup(result) {
-  const selectedNodes = new Set([
-    "hotel",
-    result.selected.gate,
-    ...result.day.stops,
-  ]);
-
-  const locationMarkers = [...selectedNodes]
-    .map((id) => {
-      const location = locations[id];
-      const point = project(location);
-      const markerType =
-        id === "hotel" ? "hotel" : location.type === "gate" ? "gate" : "stop";
-      const labelOffset =
-        id === "hotel"
-          ? { x: 10, y: -14 }
-          : id === "westGate"
-            ? { x: 10, y: 20 }
-            : { x: 10, y: -8 };
-      return `<g class="map-marker ${markerType}">
-        <circle cx="${point.x}" cy="${point.y}" r="${markerType === "stop" ? 5 : 7}" />
-        <text x="${point.x + labelOffset.x}" y="${point.y + labelOffset.y}">${escapeHtml(location.name)}</text>
-      </g>`;
+  for (const [locationId, codes] of appearances) {
+    const location = locations[locationId];
+    const label = location.kind === "charger" ? "EV" : String(codes.length);
+    L.marker([location.lat, location.lng], {
+      icon: markerIcon(label, "#17212b", location.kind === "charger"),
+      keyboard: true,
+      title: location.name,
     })
-    .join("");
+      .bindPopup(popupMarkup(locationId, codes))
+      .addTo(markerLayerHost);
+  }
 
-  const chargerMarkers = chargers
-    .map((charger) => {
-      const point = project(charger);
-      return `<g class="map-marker charger">
-        <rect x="${point.x - 5}" y="${point.y - 5}" width="10" height="10" rx="2" />
-        <title>${escapeHtml(charger.name)} · ${escapeHtml(charger.type)}</title>
-      </g>`;
-    })
-    .join("");
-
-  return locationMarkers + chargerMarkers;
+  addOtherChargers(new Set(appearances.keys()));
 }
 
-function renderFocus(result) {
-  const candidate = result.selected;
+function renderFocus(dayId) {
+  const day = itineraryDays[dayId];
+  const geometry = routeGeometries[dayId];
   focus.innerHTML = `
-    <p class="eyebrow">${escapeHtml(result.day.eyebrow)}</p>
-    <h3>${escapeHtml(result.day.title)}</h3>
-    <p>${escapeHtml(result.day.copy)}</p>
+    <p class="eyebrow">${escapeHtml(day.label)}</p>
+    <h3>${escapeHtml(day.title)}</h3>
+    <p>${escapeHtml(day.copy)}</p>
     <dl>
-      <div><dt>Optimized distance</dt><dd>${Math.round(candidate.miles)} mi</dd></div>
-      <div><dt>Drive time</dt><dd>${formatMinutes(candidate.driveMinutes)}</dd></div>
-      <div><dt>Estimated end SOC</dt><dd>${candidate.energy.endSoc.toFixed(0)}%</dd></div>
+      <div><dt>OSRM road distance</dt><dd>${formatMiles(geometry.distanceMeters)}</dd></div>
+      <div><dt>Drive time</dt><dd>${formatDuration(geometry.durationSeconds)}</dd></div>
+      <div><dt>Estimated end SOC</dt><dd>${estimateEndSoc(day, geometry).toFixed(0)}%</dd></div>
     </dl>
   `;
 }
 
-function renderMap(result) {
-  const candidate = result.selected;
-  map.innerHTML = `
-    <g class="map-grid">
-      <line x1="38" y1="160" x2="722" y2="160" />
-      <line x1="38" y1="300" x2="722" y2="300" />
-      <line x1="250" y1="38" x2="250" y2="482" />
-      <line x1="500" y1="38" x2="500" y2="482" />
-    </g>
-    <g class="park-roads">${roadMarkup()}</g>
-    <g aria-hidden="${alternativeToggle.checked ? "false" : "true"}">${rejectedMarkup(result)}</g>
-    <polyline class="route-selected" points="${routePoints(candidate)}">
-      <title>Selected ${escapeHtml(candidate.gateName)} route</title>
-    </polyline>
-    ${markerMarkup(result)}
-    <g class="map-legend" transform="translate(48 438)">
-      <line class="legend-selected" x1="0" y1="0" x2="34" y2="0" />
-      <text x="42" y="4">Selected</text>
-      <line class="legend-rejected" x1="122" y1="0" x2="156" y2="0" />
-      <text x="164" y="4">Rejected gate</text>
-      <rect class="legend-charger" x="300" y="-5" width="10" height="10" rx="2" />
-      <text x="318" y="4">Charger</text>
-    </g>
-  `;
-  map.setAttribute(
-    "aria-label",
-    `${result.day.label} selected route through ${candidate.gateName}, ${Math.round(candidate.miles)} miles, with rejected gate alternatives ${alternativeToggle.checked ? "shown" : "hidden"}.`,
-  );
-  mapStatus.textContent = `${candidate.gateName} selected · ${Math.round(candidate.miles)} mi · ${candidate.energy.endSoc.toFixed(0)}% end SOC`;
+function setSelection(selection) {
+  routeLayerHost.clearLayers();
+  markerLayerHost.clearLayers();
+  const dayIds =
+    selection === "all" ? Object.keys(itineraryDays) : [selection];
+  const bounds = L.latLngBounds([]);
+
+  for (const dayId of dayIds) {
+    routeLayers[dayId].addTo(routeLayerHost);
+    bounds.extend(L.latLngBounds(routeLatLngs(dayId)));
+  }
+
+  if (selection === "all") {
+    addSharedMarkers();
+    mapStatus.textContent = "All four OSRM road routes";
+  } else {
+    addDayMarkers(selection);
+    const day = itineraryDays[selection];
+    const geometry = routeGeometries[selection];
+    mapStatus.textContent =
+      `${day.label} · ${formatMiles(geometry.distanceMeters)} · ` +
+      `${estimateEndSoc(day, geometry).toFixed(0)}% end SOC`;
+    renderFocus(selection);
+  }
+
+  selectorButtons.forEach((button) => {
+    const active = button.dataset.mapDay === selection;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  map.fitBounds(bounds, {
+    padding: [28, 28],
+    maxZoom: selection === "all" ? 9 : 10,
+  });
 }
 
-function renderRouteOrder(result) {
-  const candidate = result.selected;
-  const orderedNames = [
-    locations.hotel.name,
-    locations[candidate.gate].name,
-    ...candidate.orderedStops.map((stop) => locations[stop].name),
-    locations[candidate.gate].name,
-    locations.hotel.name,
-  ];
-  routeOrder.innerHTML = orderedNames
-    .map((name, index) => `<li><span>${index + 1}</span>${escapeHtml(name)}</li>`)
-    .join("");
-  document.querySelector("#wildlifeModel").textContent =
-    candidate.wildlifeArrivalMinute === null
-      ? ""
-      : `Estimated wildlife arrival: ${formatClock(candidate.wildlifeArrivalMinute)}`;
-}
-
-function renderAlternatives(result) {
-  alternatives.innerHTML = result.alternatives
-    .map((candidate) => {
-      const reasons = rejectionReasons(candidate, result.settings).join(" · ");
+function renderSummary() {
+  summaryBody.innerHTML = Object.entries(itineraryDays)
+    .map(([dayId, day]) => {
+      const geometry = routeGeometries[dayId];
+      const orderedStops = day.route
+        .map((locationId) => locations[locationId].shortName)
+        .join(" → ");
+      const miles = geometry.distanceMeters / 1609.344;
+      const limitClass = miles > constraints.max_miles ? "over-limit" : "";
       return `<tr>
-        <th scope="row">${escapeHtml(candidate.gateName)}</th>
-        <td>${Math.round(candidate.miles)} mi</td>
-        <td>${formatMinutes(candidate.driveMinutes)}</td>
-        <td>${candidate.energy.endSoc.toFixed(0)}%</td>
-        <td><span class="route-state ${candidate.feasible ? "higher-score" : "infeasible"}">${candidate.feasible ? "Not selected" : "Rejected"}</span><br>${escapeHtml(reasons)}</td>
+        <th scope="row"><span class="day-swatch" style="--day-color:${day.color}"></span>${escapeHtml(day.label)}</th>
+        <td>${escapeHtml(orderedStops)}</td>
+        <td>${escapeHtml(locations[day.gate].shortName)}</td>
+        <td class="${limitClass}">${miles.toFixed(1)}</td>
+        <td>${formatDuration(geometry.durationSeconds)}</td>
+        <td>${escapeHtml(day.chargeNote)}</td>
+        <td>${estimateEndSoc(day, geometry).toFixed(0)}%</td>
       </tr>`;
     })
     .join("");
 }
 
-function render(dayId) {
-  activeDay = dayId;
-  const result = results[dayId];
-  tabs.forEach((tab) => {
-    const active = tab.dataset.day === dayId;
-    tab.classList.toggle("active", active);
-    tab.setAttribute("aria-selected", String(active));
-  });
-  renderFocus(result);
-  renderMap(result);
-  renderRouteOrder(result);
-  renderAlternatives(result);
+function validateMap() {
+  const errors = [];
+
+  for (const [dayId, day] of Object.entries(itineraryDays)) {
+    if (day.route[0] !== "hotel" || day.route.at(-1) !== "hotel") {
+      errors.push(`${day.label} must start and end at hotel`);
+    }
+    if (!routeGeometries[dayId]?.coordinates?.length) {
+      errors.push(`${day.label} has no road polyline`);
+    }
+    for (const locationId of day.route) {
+      if (!locations[locationId]) {
+        errors.push(`${day.label} has unknown stop ${locationId}`);
+      }
+    }
+    const miles = routeGeometries[dayId].distanceMeters / 1609.344;
+    if (miles > constraints.max_miles && !day.allowOver200) {
+      errors.push(`${day.label} exceeds ${constraints.max_miles} miles`);
+    }
+  }
+
+  for (const locationId of requiredMappedLocations) {
+    if (!locations[locationId]) errors.push(`Missing location ${locationId}`);
+  }
+
+  if (Object.keys(routeLayers).length !== Object.keys(itineraryDays).length) {
+    errors.push("Not every day has a Leaflet route layer");
+  }
+
+  validationStatus.classList.toggle("has-errors", errors.length > 0);
+  validationStatus.textContent = errors.length
+    ? `Validation failed: ${errors.join(" · ")}`
+    : `Validated: 4 hotel-return routes, 4 road polylines, all itinerary stops mapped. Day 4 is the documented ${formatMiles(routeGeometries.day4.distanceMeters)} long-day exception.`;
+  return errors;
 }
 
-tabs.forEach((tab) => {
-  tab.addEventListener("click", () => render(tab.dataset.day));
+for (const dayId of Object.keys(itineraryDays)) {
+  routeLayers[dayId] = createRouteLayer(dayId);
+}
+
+selectorButtons.forEach((button) => {
+  button.addEventListener("click", () => setSelection(button.dataset.mapDay));
 });
 
-alternativeToggle.addEventListener("change", () => renderMap(results[activeDay]));
+dayTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    dayTabs.forEach((item) => item.classList.remove("active"));
+    tab.classList.add("active");
+    setSelection(tab.dataset.day);
+  });
+});
 
-document.querySelector("#energyModel").textContent =
-  `${vehicle.consumptionWhPerMile} Wh/mi · ${constraints.start_soc}% start · ` +
-  `${constraints.min_end_soc}% minimum end · ${constraints.max_miles} mi maximum`;
+document.querySelector("#routeGeneratedAt").textContent =
+  `OSRM road geometry generated ${new Date(generatedAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  })}.`;
 
-document.querySelector("#rangeModel").textContent =
-  `${vehicle.practicalMilesAt80Percent} mi at 80% scales to ` +
-  `${(vehicle.practicalMilesAt80Percent / 0.8 * constraints.start_soc / 100).toFixed(0)} mi at ${constraints.start_soc}% and ` +
-  `${(vehicle.practicalMilesAt80Percent / 0.8).toFixed(0)} mi at 100%`;
-
-render(activeDay);
+renderSummary();
+setSelection("day1");
+const validationErrors = validateMap();
+if (validationErrors.length) console.error(validationErrors);
