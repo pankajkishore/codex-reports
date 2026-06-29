@@ -1,86 +1,99 @@
-import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import {
   constraints,
   itineraryDays,
   locations,
-  requiredMappedLocations,
+  priorities,
+  roadTripDays,
+  vehicle,
 } from "./route-data.mjs";
 import { routeGeometries } from "./route-geometries.mjs";
 
-const seenLocations = new Set();
-const reportHtml = await readFile(
-  new URL("./index.html", import.meta.url),
-  "utf8",
-);
-await access(
-  new URL(
-    "../../assets/images/milpitas-to-yellowstone-road-trip.png",
-    import.meta.url,
-  ),
-);
-assert.match(reportHtml, /Milpitas to Island Park in two days/);
-assert.match(reportHtml, /600–630 miles/);
-assert.match(reportHtml, /SureStay Hotel by Best Western Twin\s+Falls/);
-assert.match(
-  reportHtml,
-  /SpringHill Suites by Marriott Island\s+Park Yellowstone/,
-);
+const assert = (condition, message) => {
+  if (!condition) throw new Error(message);
+};
 
-for (const [dayId, day] of Object.entries(itineraryDays)) {
-  assert.equal(day.route[0], "hotel", `${dayId} must start at hotel`);
-  assert.equal(day.route.at(-1), "hotel", `${dayId} must end at hotel`);
+const milesFor = (dayId) => routeGeometries[dayId].distanceMeters / 1609.344;
+const days = Object.entries(itineraryDays);
 
-  for (const locationId of day.route) {
-    assert.ok(locations[locationId], `${dayId} has unknown stop ${locationId}`);
-    seenLocations.add(locationId);
+assert(days.length === 4, "Expected four park route entries.");
+assert(vehicle.practical_miles_at_80_percent === 226, "80% practical range must remain 226 miles.");
+assert(vehicle.practical_miles_at_100_percent === 283, "100% practical range must remain about 283 miles.");
+assert(constraints.comfort_max_miles === 200, "Comfort cap must remain 200 miles.");
+assert(constraints.min_end_soc === 25, "Minimum preferred end SOC must remain 25%.");
+assert(roadTripDays.length === 2, "Expected two Yellowstone-bound road-trip days.");
+
+for (const [dayId, day] of days) {
+  assert(day.route[0] === "hotel", `${dayId} must start at the hotel.`);
+  assert(day.route.at(-1) === "hotel", `${dayId} must end at the hotel.`);
+  assert(day.route.includes("westEntrance"), `${dayId} must use West Entrance.`);
+  assert(day.route.includes("westSupercharger"), `${dayId} must use the West Yellowstone Supercharger.`);
+  assert(day.targetEndSoc >= constraints.min_end_soc, `${dayId} target SOC is below 25%.`);
+  assert(day.mapStops.length >= 8, `${dayId} requires a detailed stop sequence.`);
+  assert(day.schedule.length >= 9, `${dayId} requires a complete schedule.`);
+  assert(day.weather.temperatures.length === day.weather.times.length, `${dayId} weather series mismatch.`);
+
+  for (const locationId of [...day.route, ...day.mapStops, ...day.optionalStops]) {
+    assert(locations[locationId], `${dayId} references missing location ${locationId}.`);
+    assert(Number.isFinite(locations[locationId].lat), `${locationId} has invalid latitude.`);
+    assert(Number.isFinite(locations[locationId].lng), `${locationId} has invalid longitude.`);
   }
 
   const geometry = routeGeometries[dayId];
-  assert.ok(geometry, `${dayId} must have a road polyline`);
-  assert.ok(geometry.coordinates.length > 20, `${dayId} geometry is too short`);
-  assert.equal(geometry.legs.length, day.route.length - 1);
-
-  const miles = geometry.distanceMeters / 1609.344;
-  assert.ok(
-    miles <= constraints.max_miles || day.allowOver200,
-    `${dayId} exceeds ${constraints.max_miles} miles without an exception`,
-  );
-
-  const planMatch = reportHtml.match(
-    new RegExp(
-      `<ol class="spot-list" data-route-day="${dayId}">([\\s\\S]*?)</ol>`,
-    ),
-  );
-  assert.ok(planMatch, `${dayId} must have a detailed HTML spot list`);
-  const planStops = [
-    ...planMatch[1].matchAll(/data-location="([^"]+)"/g),
-  ].map((match) => match[1]);
-  assert.deepEqual(
-    planStops,
-    day.route,
-    `${dayId} HTML spot list must match its route array`,
-  );
+  assert(geometry?.coordinates?.length > 100, `${dayId} lacks realistic road geometry.`);
+  assert(geometry.distanceMeters > 0, `${dayId} lacks route distance.`);
+  assert(geometry.durationSeconds > 0, `${dayId} lacks route duration.`);
 }
 
-for (const locationId of requiredMappedLocations) {
-  assert.ok(locations[locationId], `Missing required map location ${locationId}`);
-}
+assert(itineraryDays.day1.type === "Partial day", "Tuesday must be a partial arrival day.");
+assert(!itineraryDays.day1.route.includes("oldFaithful"), "Tuesday must not include Old Faithful.");
+assert(itineraryDays.day2.route.includes("oldFaithful"), "Wednesday must include Old Faithful.");
+assert(itineraryDays.day2.route.includes("haydenValley"), "Wednesday must include Hayden Valley.");
+assert(!itineraryDays.day3.route.includes("haydenValley"), "Thursday must not repeat Hayden Valley.");
+assert(!itineraryDays.day3.route.includes("lakeVillage"), "Thursday must not include Lake Village.");
+assert(itineraryDays.day4.route.includes("sloughCreek"), "Friday must turn at Slough Creek.");
+assert(!itineraryDays.day4.route.includes("northEntrance"), "Friday must not use North Entrance.");
+assert(!itineraryDays.day4.route.includes("northeastEntrance"), "Friday must not use Northeast Entrance.");
+assert(milesFor("day4") <= constraints.comfort_max_miles, "Friday exceeds the 200-mile comfort cap.");
+assert(locations.biscuitBasin.kind === "closed", "Biscuit Basin must be marked closed.");
 
-assert.deepEqual(itineraryDays.day1.route.slice(0, 6), [
-  "hotel",
-  "westEntrance",
-  "madisonJunction",
-  "grandPrismatic",
+const allRequiredStops = new Set(days.flatMap(([, day]) => day.mapStops));
+const priorityLocationIds = [
+  "grandPrismaticOverlook",
   "oldFaithful",
-  "westSupercharger",
-]);
+  "upperGeyser",
+  "westThumb",
+  "lakeVillage",
+  "haydenValley",
+  "artistPoint",
+  "lowerFallsView",
+  "mammoth",
+  "westernLamar",
+];
+for (const locationId of priorityLocationIds) {
+  assert(allRequiredStops.has(locationId), `Must-see stop ${locationId} is missing from the maps.`);
+}
+assert(priorities.must.length === 10, "Must-see priority list is incomplete.");
+
+const html = await readFile(new URL("./index.html", import.meta.url), "utf8");
+assert(
+  html.includes("Yellowstone 3.5-Day Optimized Tesla Itinerary"),
+  "Final 3.5-day report title is missing.",
+);
+assert(html.includes('id="masterRouteMap"'), "Master map container is missing.");
+assert(html.includes('id="dailyCards"'), "Daily card container is missing.");
+assert(html.includes("Saturday · July 4"), "Saturday drive-home section is missing.");
+assert(html.includes("Celsius forecast source"), "Weather source link is missing.");
+assert(html.includes("NPS current conditions"), "NPS conditions link is missing.");
+assert(html.includes("Tesla Superchargers"), "Tesla quick link is missing.");
+assert(html.includes("SpringHill Suites hotel"), "Hotel quick link is missing.");
+
+await access(new URL("../../assets/vendor/leaflet/leaflet.js", import.meta.url));
+await access(new URL("../../assets/vendor/leaflet/leaflet.css", import.meta.url));
+await access(new URL("../../assets/images/milpitas-to-yellowstone-road-trip.png", import.meta.url));
 
 console.log(
-  Object.entries(itineraryDays)
-    .map(([dayId, day]) => {
-      const geometry = routeGeometries[dayId];
-      return `${day.label}: ${(geometry.distanceMeters / 1609.344).toFixed(1)} mi, ${geometry.coordinates.length} road points`;
-    })
-    .join("\n"),
+  `Yellowstone itinerary validation passed: ${days
+    .map(([dayId, day]) => `${day.shortLabel} ${milesFor(dayId).toFixed(1)} mi`)
+    .join(" | ")}`,
 );

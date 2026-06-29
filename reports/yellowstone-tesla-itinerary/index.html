@@ -3,92 +3,65 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Yellowstone Tesla 4-Day Itinerary | Codex Reports</title>
+    <title>Yellowstone 3.5-Day Optimized Tesla Itinerary</title>
     <meta
       name="description"
-      content="A Tesla road trip from Milpitas to Yellowstone followed by a focused 4-day Yellowstone itinerary."
+      content="A friend-shareable Tesla road trip and final 3.5-day Yellowstone itinerary based at SpringHill Suites Island Park Yellowstone."
     />
     <link rel="stylesheet" href="../../assets/vendor/leaflet/leaflet.css" />
     <link rel="stylesheet" href="../../assets/styles.css" />
   </head>
-  <body class="trip-page">
+  <body class="trip-page final-itinerary">
     <main class="trip-shell">
-      <nav class="report-nav">
+      <nav class="report-nav" aria-label="Report sections">
         <a href="../../">Codex Reports</a>
-        <a href="#road-trip">Drive to Yellowstone</a>
-        <a href="#optimizer">Park map</a>
+        <a href="#road-trip">Road trip</a>
+        <a href="#master-map">Park map</a>
+        <a href="#daily-plan">Daily plan</a>
+        <a href="#quick-links">Quick links</a>
       </nav>
 
-      <header class="trip-hero">
+      <header class="trip-hero final-hero">
         <div>
-          <p class="eyebrow">Shareable trip plan</p>
-          <h1>Yellowstone 4-Day Tesla Itinerary</h1>
+          <p class="eyebrow">Final optimized plan · June 29-July 4, 2026</p>
+          <h1>Yellowstone 3.5-Day Optimized Tesla Itinerary</h1>
           <p class="report-summary">
-            Road trip from Milpitas on June 29, arriving near Yellowstone on
-            June 30, followed by four park days through July 3, 2026. Built
-            around Tesla charging, Indian food stops, scenic loops, and wildlife
-            windows for a 2021 Tesla Model Y Long Range.
+            Two driving days to Island Park, one arrival-afternoon Yellowstone
+            loop, three full park days, and a July 4 drive home to Milpitas.
+            West Entrance is the normal gate throughout.
           </p>
         </div>
-        <aside class="trip-card">
-          <span class="status">Tesla-focused</span>
-          <strong>Daily rule</strong>
-          <p>Start at 95%, finish at 25% or higher, and recharge before the hotel when required.</p>
+        <aside class="trip-card final-trip-card">
+          <strong>Actual park time</strong>
+          <p>Tue Jun 30: partial afternoon</p>
+          <p>Wed Jul 1-Fri Jul 3: three full days</p>
+          <p>Sat Jul 4: drive home</p>
         </aside>
       </header>
 
-      <section class="trip-stats" aria-label="Trip summary">
-        <article>
-          <span>4 days</span>
-          <strong>Loop-based plan</strong>
-        </article>
-        <article>
-          <span>West Entrance</span>
-          <strong>Primary base</strong>
-        </article>
-        <article>
-          <span>3 days ≤200 mi</span>
-          <strong>Day 4: 211 mi</strong>
-        </article>
-        <article>
-          <span>33%+ pre-charge</span>
-          <strong>Modeled daily buffer</strong>
-        </article>
+      <section class="trip-stats" aria-label="Final trip summary">
+        <article><span>3.5 park days</span><strong>Not four full days</strong></article>
+        <article><span>West Entrance</span><strong>Primary gate every day</strong></article>
+        <article><span>190-200 mi</span><strong>Tesla comfort cap</strong></article>
+        <article><span>25%+</span><strong>Preferred return SOC</strong></article>
       </section>
 
-      <section class="trip-section">
-        <div class="section-heading">
-          <p class="eyebrow">Daily focus</p>
-          <h2>Pick a day</h2>
-        </div>
-        <div class="day-tabs" role="tablist" aria-label="Yellowstone itinerary days">
-          <button class="day-tab active" type="button" data-day="day1">Day 1</button>
-          <button class="day-tab" type="button" data-day="day2">Day 2</button>
-          <button class="day-tab" type="button" data-day="day3">Day 3</button>
-          <button class="day-tab" type="button" data-day="day4">Day 4</button>
-        </div>
-        <article class="day-focus" id="dayFocus">
-          <p class="eyebrow">Day 1 · Jun 30 Tue</p>
-          <h3>West Yellowstone and Grand Prismatic</h3>
-          <p>
-            Easy arrival afternoon with Madison River, Grand Prismatic Overlook,
-            Firehole Lake Drive, and return to hotel.
-          </p>
-          <dl>
-            <div><dt>Estimated miles</dt><dd>~70</dd></div>
-            <div><dt>Battery end</dt><dd>55-65%</dd></div>
-            <div><dt>Energy style</dt><dd>Light warm-up day</dd></div>
-          </dl>
-        </article>
+      <section class="plan-alert" aria-label="Critical planning notes">
+        <strong>Two critical corrections</strong>
+        <p>
+          Tuesday begins only after the 2:30-3:30 PM hotel arrival, so Old
+          Faithful moves to Wednesday. NPS still lists Biscuit Basin as closed;
+          it is a drive-past checkpoint, not a visit.
+        </p>
       </section>
 
-      <section id="road-trip" class="trip-section arrival-section">
+      <section id="road-trip" class="trip-section final-section">
         <div class="section-heading">
-          <p class="eyebrow">Journey to Yellowstone</p>
-          <h2>Milpitas to Island Park in two days</h2>
+          <p class="eyebrow">Trip to Yellowstone</p>
+          <h2>Milpitas → Twin Falls → Island Park</h2>
           <p>
-            Approximately 600–630 miles, 14.5–15.5 hours of driving, and
-            18.5–20 hours including charging and meal stops.
+            Keep Indian meals close to the route and charge to roughly 90% at
+            major stops. Optional chargers are backups, not mandatory stops.
           </p>
         </div>
 
@@ -96,438 +69,174 @@
           <a href="../../assets/images/milpitas-to-yellowstone-road-trip.png">
             <img
               src="../../assets/images/milpitas-to-yellowstone-road-trip.png"
-              alt="Two-day Tesla route map from Milpitas California to Island Park Yellowstone with Superchargers, Indian restaurants, and overnight stops"
+              alt="Two-day Tesla route from Milpitas to Island Park with Superchargers, Indian restaurants, and overnight hotels"
             />
           </a>
           <figcaption>
-            Full driving plan with Tesla Superchargers, Indian restaurants,
-            optional stops, and overnight hotels.
+            Required chargers are primary; optional Colfax, Fernley, Battle
+            Mountain, and Rexburg stops remain backups.
           </figcaption>
         </figure>
 
-        <div class="arrival-days">
-          <article class="arrival-day day-one-drive">
-            <div>
-              <p class="eyebrow">Day 1 · June 29</p>
-              <h3>Milpitas → Twin Falls</h3>
-              <p class="arrival-route">
-                Milpitas → Rocklin/Colfax → Sparks/Reno → Winnemucca → Elko or
-                Battle Mountain → Twin Falls
-              </p>
-            </div>
-            <dl class="arrival-metrics">
-              <div><dt>Driving</dt><dd>10.5–11 hr</dd></div>
-              <div><dt>With stops</dt><dd>13–14 hr</dd></div>
-              <div><dt>Start</dt><dd>10:30 AM PT</dd></div>
-            </dl>
-            <div class="arrival-details">
-              <div>
-                <h4>Charging plan</h4>
-                <p>
-                  Rocklin or optional Colfax, Sparks/Reno, Winnemucca, Elko,
-                  optional Battle Mountain, then Twin Falls.
-                </p>
-              </div>
-              <div>
-                <h4>Food near the route</h4>
-                <p>
-                  Chat Bhavan, Tandoori Flame, Himalayan Kitchen, India Bistro,
-                  Swad Indian Cuisine, or Bombay Palace.
-                </p>
-              </div>
-            </div>
-            <p class="overnight-note">
-              <strong>Overnight:</strong> SureStay Hotel by Best Western Twin
-              Falls. Expected arrival around 11:30 PM–12:30 AM MT.
-            </p>
-          </article>
-
-          <article class="arrival-day day-two-drive">
-            <div>
-              <p class="eyebrow">Day 2 · June 30</p>
-              <h3>Twin Falls → Yellowstone hotel</h3>
-              <p class="arrival-route">
-                Twin Falls → Pocatello → Idaho Falls → optional Rexburg →
-                SpringHill Suites Island Park Yellowstone
-              </p>
-            </div>
-            <dl class="arrival-metrics">
-              <div><dt>Driving</dt><dd>4–4.5 hr</dd></div>
-              <div><dt>With stops</dt><dd>5.5–6 hr</dd></div>
-              <div><dt>Arrival</dt><dd>2:30–3:30 PM MT</dd></div>
-            </dl>
-            <div class="arrival-details">
-              <div>
-                <h4>Charging plan</h4>
-                <p>
-                  Leave Twin Falls well charged, then use Pocatello and Idaho
-                  Falls. Rexburg is an optional final top-up.
-                </p>
-              </div>
-              <div>
-                <h4>Food near the route</h4>
-                <p>
-                  Little India in Pocatello, India House in Idaho Falls, or
-                  Chutneys in Rexburg.
-                </p>
-              </div>
-            </div>
-            <p class="overnight-note">
-              <strong>Destination:</strong> SpringHill Suites by Marriott Island
-              Park Yellowstone, ready for the Day 1 afternoon park route.
-            </p>
-          </article>
-        </div>
-
-        <p class="road-trip-guidance">
-          Charge to roughly 90% at major stops, keep optional chargers as
-          backups, and allow extra time for traffic, weather, meals, and late
-          arrival check-in.
-        </p>
-      </section>
-
-      <section id="optimizer" class="trip-section optimizer-section">
-        <div class="optimizer-heading">
-          <div>
-            <p class="eyebrow">Interactive road map</p>
-            <h2>Actual roads, stops, and charging</h2>
-            <p>
-              OpenStreetMap tiles with OSRM road geometry. Select one day for
-              numbered stops or show all four colored routes together.
-            </p>
-          </div>
-        </div>
-
-        <div class="map-day-selector" role="group" aria-label="Map route day">
-          <button class="map-day-button active" type="button" data-map-day="day1" aria-pressed="true">Day 1</button>
-          <button class="map-day-button" type="button" data-map-day="day2" aria-pressed="false">Day 2</button>
-          <button class="map-day-button" type="button" data-map-day="day3" aria-pressed="false">Day 3</button>
-          <button class="map-day-button" type="button" data-map-day="day4" aria-pressed="false">Day 4</button>
-          <button class="map-day-button" type="button" data-map-day="all" aria-pressed="false">Show all</button>
-        </div>
-
-        <div class="route-map-shell">
-          <div class="map-toolbar">
-            <strong id="mapStatus">Loading road routes…</strong>
-            <span>Use +/− controls to zoom</span>
-          </div>
-          <div id="routeMap" aria-label="Interactive Yellowstone daily road route map"></div>
-        </div>
-
-        <div class="map-validation" id="mapValidation" role="status">Validating routes…</div>
-
-        <div class="table-scroll route-summary-table">
-          <table class="route-table">
+        <div class="table-scroll final-table-shell">
+          <table class="final-table">
             <thead>
               <tr>
                 <th>Day</th>
-                <th>Ordered stops</th>
-                <th>Gate used</th>
-                <th>Miles</th>
-                <th>Drive time</th>
-                <th>Charge stop</th>
-                <th>End SOC</th>
+                <th>Route</th>
+                <th>Required Superchargers</th>
+                <th>Optional backups</th>
+                <th>Indian food</th>
+                <th>Overnight / arrival</th>
+              </tr>
+            </thead>
+            <tbody id="roadTripTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="trip-section final-section priority-section">
+        <div class="section-heading">
+          <p class="eyebrow">Decision guide</p>
+          <h2>Protect the must-see list</h2>
+        </div>
+        <div class="priority-grid">
+          <article>
+            <h3>Must-see</h3>
+            <ul id="mustSeeList"></ul>
+          </article>
+          <article>
+            <h3>Optional</h3>
+            <ul id="optionalList"></ul>
+          </article>
+          <article>
+            <h3>Skip unless extra time</h3>
+            <ul id="skipList"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="master-map" class="trip-section final-section">
+        <div class="section-heading">
+          <p class="eyebrow">Master park overview</p>
+          <h2>Four color-coded routes</h2>
+          <p>
+            Orange Tuesday, blue Wednesday, green Thursday, purple Friday.
+            Solid numbered markers are required; gray markers are optional.
+          </p>
+        </div>
+
+        <div class="master-map-controls" role="group" aria-label="Master map route">
+          <button type="button" data-master-day="all" class="active" aria-pressed="true">Show all</button>
+          <button type="button" data-master-day="day1" aria-pressed="false">Tuesday</button>
+          <button type="button" data-master-day="day2" aria-pressed="false">Wednesday</button>
+          <button type="button" data-master-day="day3" aria-pressed="false">Thursday</button>
+          <button type="button" data-master-day="day4" aria-pressed="false">Friday</button>
+        </div>
+
+        <div class="final-map-shell">
+          <div class="map-toolbar">
+            <strong id="masterMapStatus">Loading all routes…</strong>
+            <span>Use +/− controls to zoom</span>
+          </div>
+          <div id="masterRouteMap" class="master-route-map" aria-label="Master Yellowstone route map"></div>
+        </div>
+
+        <div id="mapValidation" class="map-validation" role="status">Validating routes…</div>
+
+        <div class="table-scroll final-table-shell">
+          <table class="final-table route-plan-table">
+            <thead>
+              <tr>
+                <th>Park day</th>
+                <th>Route focus</th>
+                <th>Requested target</th>
+                <th>OSRM road model</th>
+                <th>Drive</th>
+                <th>Pre-charge SOC target</th>
+                <th>Departure</th>
               </tr>
             </thead>
             <tbody id="routeSummaryBody"></tbody>
           </table>
         </div>
-        <p class="optimizer-caveat">
-          <span id="routeGeneratedAt"></span> Coordinates are WGS84. Distances
-          exclude traffic, wildlife delays, parking searches, and closures.
-          Verify conditions in live navigation before departure.
+
+        <p class="distance-reality">
+          <strong>Distance reality check:</strong> Tuesday’s complete
+          hotel-to-hotel road model is about 102 miles; the requested 65-70 mile
+          target describes the shorter park-corridor concept. Friday’s optimized
+          Slough Creek turnaround is about 196 miles and remains under the
+          200-mile comfort cap.
         </p>
-        <div class="source-links" aria-label="Map data sources">
-          <a href="https://www.openstreetmap.org/copyright">OpenStreetMap data</a>
-          <a href="https://project-osrm.org/">OSRM routing</a>
-          <a href="https://www.nps.gov/articles/evcharging.htm">NPS Yellowstone EV charging</a>
-          <a href="https://www.marriott.com/en-us/hotels/idasl-springhill-suites-island-park-yellowstone/overview/">SpringHill Suites property</a>
+      </section>
+
+      <section id="daily-plan" class="trip-section final-section">
+        <div class="section-heading">
+          <p class="eyebrow">Yellowstone park plan</p>
+          <h2>One partial day, three full days</h2>
+        </div>
+        <div id="dailyCards" class="daily-card-list"></div>
+      </section>
+
+      <section class="trip-section final-section drive-home-section">
+        <div>
+          <p class="eyebrow">Saturday · July 4</p>
+          <h2>Drive home to Milpitas</h2>
+          <p id="driveHomeRoute"></p>
+        </div>
+        <div class="drive-home-grid">
+          <div><strong>Default</strong><span id="driveHomeGuidance"></span></div>
+          <div><strong>Charging</strong><span id="driveHomeCharge"></span></div>
         </div>
       </section>
 
-      <section class="trip-section itinerary-grid">
-        <details open>
-          <summary><span>Day 1</span> West Yellowstone + Grand Prismatic</summary>
-          <h4 class="stops-heading">All planned stops</h4>
-          <ol class="spot-list" data-route-day="day1">
-            <li data-location="hotel"><strong>SpringHill Suites</strong><span>Depart the hotel for the afternoon park route.</span></li>
-            <li data-location="westEntrance"><strong>West Entrance</strong><span>Enter Yellowstone and follow the Madison River corridor.</span></li>
-            <li data-location="madisonJunction"><strong>Madison Junction</strong><span>Scenic river junction and the turn toward the geyser basins.</span></li>
-            <li data-location="grandPrismatic"><strong>Grand Prismatic Spring</strong><span>Walk the Midway Geyser Basin boardwalk for the park’s largest hot spring.</span></li>
-            <li data-location="oldFaithful"><strong>Old Faithful</strong><span>Watch a geyser eruption and explore the historic inn and Upper Geyser Basin.</span></li>
-            <li data-location="westSupercharger"><strong>West Yellowstone Supercharger</strong><span>Optional top-up before the final hotel leg.</span></li>
-            <li data-location="hotel"><strong>SpringHill Suites</strong><span>Return to the hotel.</span></li>
-          </ol>
-          <p><strong>Drive:</strong> 111 miles. <strong>Estimated battery:</strong> ~82% after optional top-up.</p>
-          <div class="day-planner">
-            <article class="weather-card">
-              <h4>Hourly forecast in Celsius</h4>
-              <svg viewBox="0 0 340 160" role="img" aria-label="Day 1 hourly Celsius temperature line graph">
-                <polyline class="axis-line" points="46,120 314,120"></polyline>
-                <polyline class="axis-line" points="46,30 46,120"></polyline>
-                <polyline class="grid-line" points="46,120 314,120"></polyline>
-                <polyline class="grid-line" points="46,94 314,94"></polyline>
-                <polyline class="grid-line" points="46,69 314,69"></polyline>
-                <polyline class="grid-line" points="46,43 314,43"></polyline>
-                <g class="y-axis-labels">
-                  <text x="8" y="123">0°C</text><text x="2" y="97">10°C</text>
-                  <text x="2" y="72">20°C</text><text x="2" y="46">30°C</text>
-                </g>
-                <polyline class="temp-line day-one" points="54,113 102,86 150,73 198,66 246,67 294,87"></polyline>
-                <g class="temp-points">
-                  <circle cx="54" cy="113" r="4"></circle><circle cx="102" cy="86" r="4"></circle>
-                  <circle cx="150" cy="73" r="4"></circle><circle cx="198" cy="66" r="4"></circle>
-                  <circle cx="246" cy="67" r="4"></circle><circle cx="294" cy="87" r="4"></circle>
-                </g>
-                <g class="axis-labels">
-                  <text x="48" y="145">6a</text><text x="96" y="145">9a</text><text x="142" y="145">12p</text>
-                  <text x="190" y="145">3p</text><text x="238" y="145">6p</text><text x="286" y="145">9p</text>
-                </g>
-              </svg>
-              <p><strong>Forecast:</strong> ~3°C morning, ~21°C afternoon, ~13°C evening. Rain chance stays low.</p>
-            </article>
-            <article class="wear-card">
-              <h4>Clothes</h4>
-              <ul>
-                <li>Light base layer plus fleece or hoodie for the cool morning and evening.</li>
-                <li>Rain shell in the car; afternoon storms are common.</li>
-                <li>Comfortable walking shoes for overlook and boardwalks.</li>
-              </ul>
-            </article>
-            <article class="food-card">
-              <h4>Food that fits</h4>
-              <ul>
-                <li>Late lunch or early dinner in West Yellowstone before entering.</li>
-                <li>Carry snacks and water for Grand Prismatic and Firehole stops.</li>
-                <li>Dinner back in West Yellowstone after charging.</li>
-              </ul>
-            </article>
-          </div>
-        </details>
-
-        <details>
-          <summary><span>Day 2</span> Old Faithful + Yellowstone Lake</summary>
-          <h4 class="stops-heading">All planned stops</h4>
-          <ol class="spot-list" data-route-day="day2">
-            <li data-location="hotel"><strong>SpringHill Suites</strong><span>Early hotel departure for the south loop.</span></li>
-            <li data-location="westEntrance"><strong>West Entrance</strong><span>Enter Yellowstone through the west gate.</span></li>
-            <li data-location="madisonJunction"><strong>Madison Junction</strong><span>Continue south along the Firehole River corridor.</span></li>
-            <li data-location="oldFaithful"><strong>Old Faithful</strong><span>See the geyser, visitor center, historic inn, and nearby thermal features.</span></li>
-            <li data-location="westThumb"><strong>West Thumb Geyser Basin</strong><span>Walk lakeside boardwalks with hot springs beside Yellowstone Lake.</span></li>
-            <li data-location="lakeYellowstone"><strong>Lake Yellowstone</strong><span>See the lakefront and historic Lake Yellowstone Hotel area.</span></li>
-            <li data-location="hotel"><strong>SpringHill Suites</strong><span>Return to the hotel through the West Entrance.</span></li>
-          </ol>
-          <p><strong>Drive:</strong> 175 miles. <strong>Estimated battery:</strong> ~33% end.</p>
-          <div class="day-planner">
-            <article class="weather-card">
-              <h4>Hourly forecast in Celsius</h4>
-              <svg viewBox="0 0 340 160" role="img" aria-label="Day 2 hourly Celsius temperature line graph">
-                <polyline class="axis-line" points="46,120 314,120"></polyline>
-                <polyline class="axis-line" points="46,30 46,120"></polyline>
-                <polyline class="grid-line" points="46,120 314,120"></polyline>
-                <polyline class="grid-line" points="46,94 314,94"></polyline>
-                <polyline class="grid-line" points="46,69 314,69"></polyline>
-                <polyline class="grid-line" points="46,43 314,43"></polyline>
-                <g class="y-axis-labels">
-                  <text x="8" y="123">0°C</text><text x="2" y="97">10°C</text>
-                  <text x="2" y="72">20°C</text><text x="2" y="46">30°C</text>
-                </g>
-                <polyline class="temp-line day-two" points="54,113 102,83 150,62 198,54 246,55 294,80"></polyline>
-                <g class="temp-points">
-                  <circle cx="54" cy="113" r="4"></circle><circle cx="102" cy="83" r="4"></circle>
-                  <circle cx="150" cy="62" r="4"></circle><circle cx="198" cy="54" r="4"></circle>
-                  <circle cx="246" cy="55" r="4"></circle><circle cx="294" cy="80" r="4"></circle>
-                </g>
-                <g class="axis-labels">
-                  <text x="48" y="145">6a</text><text x="96" y="145">9a</text><text x="142" y="145">12p</text>
-                  <text x="190" y="145">3p</text><text x="238" y="145">6p</text><text x="286" y="145">9p</text>
-                </g>
-              </svg>
-              <p><strong>Forecast:</strong> ~3°C morning, ~26°C afternoon, ~16°C evening near West Yellowstone.</p>
-            </article>
-            <article class="wear-card">
-              <h4>Clothes</h4>
-              <ul>
-                <li>Layered top, windbreaker, and sun hat.</li>
-                <li>Lake stops can feel cooler and windier than Old Faithful.</li>
-                <li>Bring sunglasses; boardwalk glare can be strong midday.</li>
-              </ul>
-            </article>
-            <article class="food-card">
-              <h4>Food that fits</h4>
-              <ul>
-                <li>Breakfast or coffee at Old Faithful Inn, Snow Lodge, or Bear Paw Deli.</li>
-                <li>Lunch around Old Faithful before the lake loop.</li>
-                <li>Backup grab-and-go near Lake Hotel Deli or Lake Lodge cafeteria.</li>
-              </ul>
-            </article>
-          </div>
-        </details>
-
-        <details>
-          <summary><span>Day 3</span> Canyon + Hayden Wildlife</summary>
-          <h4 class="stops-heading">All planned stops</h4>
-          <ol class="spot-list" data-route-day="day3">
-            <li data-location="hotel"><strong>SpringHill Suites</strong><span>Depart early with breakfast and wildlife gear ready.</span></li>
-            <li data-location="westEntrance"><strong>West Entrance</strong><span>Enter the park and follow the Madison River.</span></li>
-            <li data-location="madisonJunction"><strong>Madison Junction</strong><span>Turn north toward Norris and the Grand Loop Road.</span></li>
-            <li data-location="norris"><strong>Norris Geyser Basin</strong><span>Explore Porcelain Basin or Back Basin in Yellowstone’s hottest thermal area.</span></li>
-            <li data-location="canyonVillage"><strong>Canyon Village</strong><span>Food, restrooms, visitor services, and access to the canyon area.</span></li>
-            <li data-location="artistPoint"><strong>Artist Point</strong><span>Classic view of Lower Falls and the Grand Canyon of the Yellowstone.</span></li>
-            <li data-location="haydenValley"><strong>Hayden Valley</strong><span>Wildlife viewing for bison, elk, and possible bears or wolves from safe pullouts.</span></li>
-            <li data-location="hotel"><strong>SpringHill Suites</strong><span>Return to the hotel through the West Entrance.</span></li>
-          </ol>
-          <p><strong>Drive:</strong> 148 miles. <strong>Estimated battery:</strong> ~43% end.</p>
-          <div class="day-planner">
-            <article class="weather-card">
-              <h4>Hourly forecast in Celsius</h4>
-              <svg viewBox="0 0 340 160" role="img" aria-label="Day 3 hourly Celsius temperature line graph">
-                <polyline class="axis-line" points="46,120 314,120"></polyline>
-                <polyline class="axis-line" points="46,30 46,120"></polyline>
-                <polyline class="grid-line" points="46,120 314,120"></polyline>
-                <polyline class="grid-line" points="46,94 314,94"></polyline>
-                <polyline class="grid-line" points="46,69 314,69"></polyline>
-                <polyline class="grid-line" points="46,43 314,43"></polyline>
-                <g class="y-axis-labels">
-                  <text x="8" y="123">0°C</text><text x="2" y="97">10°C</text>
-                  <text x="2" y="72">20°C</text><text x="2" y="46">30°C</text>
-                </g>
-                <polyline class="temp-line day-three" points="54,104 102,73 150,49 198,43 246,43 294,70"></polyline>
-                <g class="temp-points">
-                  <circle cx="54" cy="104" r="4"></circle><circle cx="102" cy="73" r="4"></circle>
-                  <circle cx="150" cy="49" r="4"></circle><circle cx="198" cy="43" r="4"></circle>
-                  <circle cx="246" cy="43" r="4"></circle><circle cx="294" cy="70" r="4"></circle>
-                </g>
-                <g class="axis-labels">
-                  <text x="48" y="145">6a</text><text x="96" y="145">9a</text><text x="142" y="145">12p</text>
-                  <text x="190" y="145">3p</text><text x="238" y="145">6p</text><text x="286" y="145">9p</text>
-                </g>
-              </svg>
-              <p><strong>Forecast:</strong> ~6°C morning, ~31°C afternoon, ~19°C evening. Dry forecast.</p>
-            </article>
-            <article class="wear-card">
-              <h4>Clothes</h4>
-              <ul>
-                <li>Warm morning layer for early Hayden Valley wildlife viewing.</li>
-                <li>Trail shoes with grip for canyon viewpoints and stairs.</li>
-                <li>Breathable shirt for afternoon heat; keep rain shell as a park habit.</li>
-              </ul>
-            </article>
-            <article class="food-card">
-              <h4>Food that fits</h4>
-              <ul>
-                <li>Pack breakfast or grab coffee before entering to reach wildlife earlier.</li>
-                <li>Lunch at Canyon Lodge Eatery or Falls Cafe near the route.</li>
-                <li>Carry a picnic/snack kit so wildlife delays do not wreck dinner timing.</li>
-              </ul>
-            </article>
-          </div>
-        </details>
-
-        <details>
-          <summary><span>Day 4</span> Mammoth + Western Lamar Valley</summary>
-          <h4 class="stops-heading">All planned stops</h4>
-          <ol class="spot-list" data-route-day="day4">
-            <li data-location="hotel"><strong>SpringHill Suites</strong><span>Very early departure for the longest driving day.</span></li>
-            <li data-location="westEntrance"><strong>West Entrance</strong><span>Enter Yellowstone before peak gate traffic.</span></li>
-            <li data-location="madisonJunction"><strong>Madison Junction</strong><span>Turn north toward Norris and Mammoth.</span></li>
-            <li data-location="norris"><strong>Norris Geyser Basin</strong><span>Brief scenic stop or pass-through depending on wildlife timing.</span></li>
-            <li data-location="mammoth"><strong>Mammoth Hot Springs</strong><span>See the travertine terraces, historic district, and resident elk area.</span></li>
-            <li data-location="towerFall"><strong>Tower Fall</strong><span>View the 132-foot waterfall and the Tower Creek canyon.</span></li>
-            <li data-location="lamarValley"><strong>Lamar Valley</strong><span>Primary wildlife window for bison, pronghorn, bears, and possible wolves.</span></li>
-            <li data-location="westSupercharger"><strong>West Yellowstone Supercharger</strong><span>Required charge before returning to Island Park.</span></li>
-            <li data-location="hotel"><strong>SpringHill Suites</strong><span>Return to the hotel after charging.</span></li>
-          </ol>
-          <p><strong>Drive:</strong> 211 miles. <strong>Estimated battery:</strong> ~82% after required top-up.</p>
-          <div class="day-planner">
-            <article class="weather-card">
-              <h4>Hourly forecast in Celsius</h4>
-              <svg viewBox="0 0 340 160" role="img" aria-label="Day 4 hourly Celsius temperature line graph">
-                <polyline class="axis-line" points="46,120 314,120"></polyline>
-                <polyline class="axis-line" points="46,30 46,120"></polyline>
-                <polyline class="grid-line" points="46,120 314,120"></polyline>
-                <polyline class="grid-line" points="46,94 314,94"></polyline>
-                <polyline class="grid-line" points="46,69 314,69"></polyline>
-                <polyline class="grid-line" points="46,43 314,43"></polyline>
-                <g class="y-axis-labels">
-                  <text x="8" y="123">0°C</text><text x="2" y="97">10°C</text>
-                  <text x="2" y="72">20°C</text><text x="2" y="46">30°C</text>
-                </g>
-                <polyline class="temp-line day-four" points="54,95 102,65 150,38 198,37 246,44 294,66"></polyline>
-                <g class="temp-points">
-                  <circle cx="54" cy="95" r="4"></circle><circle cx="102" cy="65" r="4"></circle>
-                  <circle cx="150" cy="38" r="4"></circle><circle cx="198" cy="37" r="4"></circle>
-                  <circle cx="246" cy="44" r="4"></circle><circle cx="294" cy="66" r="4"></circle>
-                </g>
-                <g class="axis-labels">
-                  <text x="48" y="145">6a</text><text x="96" y="145">9a</text><text x="142" y="145">12p</text>
-                  <text x="190" y="145">3p</text><text x="238" y="145">6p</text><text x="286" y="145">9p</text>
-                </g>
-              </svg>
-              <p><strong>Forecast:</strong> ~10°C morning, ~32°C afternoon, ~21°C evening. Warmest day.</p>
-            </article>
-            <article class="wear-card">
-              <h4>Clothes</h4>
-              <ul>
-                <li>Convertible layers: cool morning, hot Mammoth/Lamar afternoon.</li>
-                <li>Breathable shirt, sun protection, and a light insulating layer.</li>
-                <li>Keep binoculars and a warm layer handy for Lamar stops.</li>
-              </ul>
-            </article>
-            <article class="food-card">
-              <h4>Food that fits</h4>
-              <ul>
-                <li>Early breakfast packed in the car to protect the long driving day.</li>
-                <li>Lunch at Mammoth Hotel Dining Room or Terrace Grill.</li>
-                <li>Roosevelt Lodge Dining Room is a route-friendly option if timing works.</li>
-              </ul>
-            </article>
-          </div>
-        </details>
-      </section>
-
-      <section class="trip-section weather-note">
-        <p class="eyebrow">Weather context</p>
-        <h2>Forecast and packing assumptions</h2>
-        <p>
-          The temperature curves above use Open-Meteo hourly forecast data for
-          West Yellowstone in Celsius, sampled at 6a, 9a, 12p, 3p, 6p, and 9p.
-          Yellowstone's official guidance still matters: weather changes quickly,
-          nights are cool, and afternoon thunderstorms can happen in summer.
-          Refresh the forecast a day or two before departure and keep rain gear
-          plus warm layers in the Tesla.
-        </p>
-        <div class="source-links">
-          <a href="https://api.open-meteo.com/v1/forecast?latitude=44.6621&longitude=-111.1041&hourly=temperature_2m,precipitation_probability,weather_code&temperature_unit=celsius&timezone=America%2FDenver&start_date=2026-06-30&end_date=2026-07-03">Open-Meteo Forecast</a>
-          <a href="https://www.nps.gov/yell/planyourvisit/weather.htm">NPS Yellowstone Weather</a>
-          <a href="https://www.nps.gov/yell/planyourvisit/wheretoeat.htm">NPS Food &amp; Dining</a>
-          <a href="https://www.yellowstonenationalparklodges.com/dining/">Yellowstone Lodges Dining</a>
+      <section class="trip-section final-section tesla-section">
+        <div class="section-heading">
+          <p class="eyebrow">Tesla operating rules</p>
+          <h2>Range discipline</h2>
+        </div>
+        <div class="tesla-rules">
+          <div><strong>226 mi at 80%</strong><span>About 282-285 mi at 100%</span></div>
+          <div><strong>90-100% start</strong><span>Charge every evening in West Yellowstone</span></div>
+          <div><strong>25%+ return</strong><span>Use 190-200 mi as the comfort ceiling</span></div>
+          <div><strong>Level 2 = backup</strong><span>Old Faithful, Canyon, Mammoth, and Lake</span></div>
         </div>
       </section>
 
-      <section class="trip-section two-column">
-        <article>
-          <p class="eyebrow">Charging plan</p>
-          <h2>Tesla notes</h2>
-          <ul class="clean-list">
-            <li>Use the West Yellowstone Supercharger at Grizzly &amp; Wolf Discovery Center.</li>
-            <li>Charge every evening after returning.</li>
-            <li>Charge to 90-100% each night before the next loop.</li>
-            <li>Level 2 chargers at select park locations are backup options for longer stops.</li>
-          </ul>
-        </article>
-        <article>
-          <p class="eyebrow">Friend-friendly version</p>
-          <h2>Simple trip story</h2>
+      <section class="trip-section final-section packing-section">
+        <div class="section-heading">
+          <p class="eyebrow">Weather and packing</p>
+          <h2>Cold dawns, warm afternoons</h2>
           <p>
-            Day 1 is the colorful geyser warm-up. Day 2 is the classic Old
-            Faithful and lake loop. Day 3 is waterfalls, canyon views, and
-            wildlife. Day 4 is the big northern route with Mammoth, Tower Fall,
-            and the western Lamar Valley.
+            Current West Yellowstone forecast guidance spans roughly 3-24°C.
+            Yellowstone microclimates vary, so keep layers in the Tesla.
           </p>
-        </article>
+        </div>
+        <ul class="packing-list">
+          <li>Warm fleece or light insulated layer for 4:45-6:00 AM starts.</li>
+          <li>Breathable daytime shirt, sun hat, sunglasses, and sunscreen.</li>
+          <li>Rain shell every day; Wednesday and Friday have the higher shower signal.</li>
+          <li>Supportive walking shoes for geyser boardwalks and canyon stairs.</li>
+          <li>Water, snacks, binoculars, bear spray knowledge, and offline maps.</li>
+        </ul>
       </section>
 
+      <section id="quick-links" class="trip-section final-section">
+        <div class="section-heading">
+          <p class="eyebrow">Open before departure</p>
+          <h2>Quick links</h2>
+        </div>
+        <div class="quick-link-grid">
+          <a href="https://www.google.com/maps/dir/?api=1&origin=Milpitas%2C%20CA&destination=SpringHill%20Suites%20Island%20Park%20Yellowstone&waypoints=Twin%20Falls%2C%20ID&travelmode=driving">Google Maps: road trip</a>
+          <a href="https://www.tesla.com/findus">Tesla Superchargers</a>
+          <a href="https://www.nps.gov/yell/planyourvisit/conditions.htm/index.htm">NPS current conditions</a>
+          <a href="https://www.nps.gov/yell/planyourvisit/parkroads.htm">NPS road status</a>
+          <a href="https://www.nps.gov/yell/planyourvisit/wheretoeat.htm">Yellowstone dining</a>
+          <a href="https://www.marriott.com/en-us/hotels/idasl-springhill-suites-island-park-yellowstone/overview/">SpringHill Suites hotel</a>
+          <a href="https://www.nps.gov/places/000/biscuit-basin-trailhead-ok4.htm">Biscuit Basin closure</a>
+          <a href="https://api.open-meteo.com/v1/forecast?latitude=44.6621&longitude=-111.1041&hourly=temperature_2m,precipitation_probability,weather_code&temperature_unit=celsius&timezone=America%2FDenver&start_date=2026-06-30&end_date=2026-07-03">Celsius forecast source</a>
+        </div>
+      </section>
     </main>
 
     <script src="../../assets/vendor/leaflet/leaflet.js"></script>
